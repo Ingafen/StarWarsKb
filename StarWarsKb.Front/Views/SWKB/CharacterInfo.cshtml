@@ -1,0 +1,62 @@
+﻿@model StarWars.Infrastructure.Model.Character
+@{
+    ViewBag.Title = "Character information";
+    Layout = "_Layout";
+}
+<h1> @Model.Name </h1>
+<br/>
+<dl class="row">
+    <dt class="col-sm-2">Height</dt>
+    <dd class="col-sm-9">@Model.Height</dd>
+    <dt class="col-sm-2">Mass</dt>
+    <dd class="col-sm-9">@Model.Mass</dd>
+    <dt class="col-sm-2">Hair color</dt>
+    <dd class="col-sm-9">@Model.HairColor</dd>
+    <dt class="col-sm-2">Skin color</dt>
+    <dd class="col-sm-9">@Model.SkinColor</dd>
+    <dt class="col-sm-2">Eye color</dt>
+    <dd class="col-sm-9">@Model.EyeColor</dd>
+    <dt class="col-sm-2">Birth year</dt>
+    <dd class="col-sm-9">@Model.BirthYear</dd>
+    <dt class="col-sm-2">Gender</dt>
+    <dd class="col-sm-9">@Model.Gender</dd>
+    <dt class="col-sm-2">Films</dt>
+    <dd class="col-sm-9">
+        <ul>
+            @foreach (var f in @Model.Films)
+            {
+                <li>@f.Title - (Episode @f.EpisodeId)</li>
+            }    
+        </ul>
+    </dd>
+    <dt class="col-sm-2">Home world</dt>
+    <dd class="col-sm-9">@Model.HomeWorld.Name</dd>
+    <dt class="col-sm-2">Species</dt>
+    <dd class="col-sm-9">
+        <ul>
+            @foreach (var s in @Model.Species)
+            {
+                <li>@s.Name - @s.Classification</li>
+            }
+        </ul>
+    </dd>
+    <dt class="col-sm-2">Starships</dt>
+    <dd class="col-sm-9">
+        <ul>
+            @foreach (var s in @Model.Startships)
+            {
+                <li>@s.Name</li>
+            }
+        </ul>
+    </dd>
+    <dt class="col-sm-2">Vehicles</dt>
+    <dd class="col-sm-9">
+        <ul>
+            @foreach (var s in @Model.Vehicles)
+            {
+                <li>@s.Name</li>
+            }
+        </ul>
+    </dd>
+    
+</dl>
