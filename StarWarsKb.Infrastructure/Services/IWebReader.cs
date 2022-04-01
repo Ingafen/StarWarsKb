@@ -1,8 +1,9 @@
-using StarWars.Infrastructure.Services.POCO;
+using StarWarsKb.Infrastructure.Services.POCO;
 
-namespace StarWars.Infrastructure.Services;
-
-public interface IWebReader<T> where T: IStarWarPOCOEntity
+namespace StarWarsKb.Infrastructure.Services
 {
-    T? ReadEntityWithId(int id);
+    public interface IWebReader<T> where T : IStarWarPOCOEntity
+    {
+        T ReadEntityWithId(int id);
+    }
 }

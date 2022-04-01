@@ -1,7 +1,11 @@
-﻿namespace StarWars.Infrastructure.Model;
+﻿using StarWars.Infrastructure.Model;
 
-public class Vehicle
+namespace StarWarsKb.Infrastructure.Model
 {
-    public string Name { get; set; }
-    public string Model { get; set; }
+    public class Vehicle : IStarWarsEntity
+    {
+        public string Name { get; set; }
+        public string Model { get; set; }
+        public int StarWarId { get; set; }
+    }
 }

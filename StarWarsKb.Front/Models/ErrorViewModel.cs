@@ -1,5 +1,3 @@
-using System;
-
 namespace StarWarsKb.Front.Models
 {
     public class ErrorViewModel

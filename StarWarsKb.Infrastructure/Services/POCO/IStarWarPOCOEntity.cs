@@ -1,6 +1,7 @@
-namespace StarWars.Infrastructure.Services.POCO;
-
-public interface IStarWarPOCOEntity
+namespace StarWarsKb.Infrastructure.Services.POCO
 {
-    public string url { get; set; }
+    public interface IStarWarPOCOEntity
+    {
+        public string url { get; set; }
+    }
 }

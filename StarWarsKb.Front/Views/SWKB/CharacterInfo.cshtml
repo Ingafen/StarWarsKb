@@ -1,4 +1,4 @@
-﻿@model StarWars.Infrastructure.Model.Character
+﻿@model StarWarsKb.Infrastructure.Model.Character
 @{
     ViewBag.Title = "Character information";
     Layout = "_Layout";
@@ -43,7 +43,7 @@
     <dt class="col-sm-2">Starships</dt>
     <dd class="col-sm-9">
         <ul>
-            @foreach (var s in @Model.Startships)
+            @foreach (var s in @Model.Starships)
             {
                 <li>@s.Name</li>
             }

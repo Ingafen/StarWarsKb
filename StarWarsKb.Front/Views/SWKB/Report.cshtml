@@ -1,4 +1,4 @@
-﻿@model IList<StarWars.Infrastructure.Model.Character> 
+﻿@model IList<StarWarsKb.Infrastructure.Model.Character> 
 @{
     ViewBag.Title = "Ships report";
     Layout = "_Layout";
@@ -13,7 +13,7 @@
             <div class="ms-2 me-auto">
                 <div class="fw-bold">@c.Name</div>
                 <ul>
-                    @foreach (var ship in c.Startships)
+                    @foreach (var ship in c.Starships)
                     {
                         <li class="opacity-50"><b>@ship.Model</b> - @ship.Name</li>
                     }

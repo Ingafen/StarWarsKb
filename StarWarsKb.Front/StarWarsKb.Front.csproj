@@ -5,4 +5,8 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\StarWarsKb.Infrastructure\StarWarsKb.Infrastructure.csproj" />
+    </ItemGroup>
+
 </Project>

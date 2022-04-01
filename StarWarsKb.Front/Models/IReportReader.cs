@@ -1,8 +1,11 @@
-﻿using StarWars.Infrastructure.Model;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using StarWarsKb.Infrastructure.Model;
 
-namespace StarWars.Front.Models;
-
-public interface IReportReader
+namespace StarWarsKb.Front.Models
 {
-    public Task<IList<Character>> GetReport();
+    public interface IReportReader
+    {
+        public Task<IList<Character>> GetReport();
+    }
 }

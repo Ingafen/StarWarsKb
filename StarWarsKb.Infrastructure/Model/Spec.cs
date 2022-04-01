@@ -1,7 +1,11 @@
-﻿namespace StarWars.Infrastructure.Model;
+﻿using StarWars.Infrastructure.Model;
 
-public class Spec
+namespace StarWarsKb.Infrastructure.Model
 {
-    public string Name { get; set; }
-    public string Classification { get; set; }
+    public class Spec : IStarWarsEntity
+    {
+        public string Name { get; set; }
+        public string Classification { get; set; }
+        public int StarWarId { get; set; }
+    }
 }

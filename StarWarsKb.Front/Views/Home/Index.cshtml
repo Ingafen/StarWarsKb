@@ -1,8 +1,13 @@
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Star Wars KB";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">@ViewData["HelloMsg"]</h1>
+    <p>to Star Wars KB</p>
+</div>
+<div class="text-center">
+    <a asp-area="" asp-controller="Swkb" asp-action="Characters">
+        <img src="https://img.icons8.com/color/480/000000/darth-vader.png" class="img-fluid" alt="darth"/>
+    </a>
 </div>

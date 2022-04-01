@@ -1,12 +1,15 @@
-﻿using StarWars.Infrastructure.Model;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using StarWarsKb.Infrastructure.Model;
 
-namespace StarWars.Front.Models;
-
-public class StubReportReader : IReportReader
+namespace StarWarsKb.Front.Models
 {
-    public async Task<IList<Character>> GetReport()
+    public class StubReportReader : IReportReader
     {
-        Task<IList<Character>> characters = new StubCharactersReader().Characters();
-        return await characters;
+        public async Task<IList<Character>> GetReport()
+        {
+            Task<IList<Character>> characters = new StubCharactersReader().Characters();
+            return await characters;
+        }
     }
 }

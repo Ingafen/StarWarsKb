@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using StarWarsKb.Front.Models;
 
 namespace StarWarsKb.Front
 {
@@ -24,6 +25,10 @@ namespace StarWarsKb.Front
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddTransient<ICharactersReader, StubCharactersReader>();
+            services.AddTransient<IReportReader, StubReportReader>();
+            services.AddHttpClient();
+            services.AddTransient<IHttpReader, HttpReader>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

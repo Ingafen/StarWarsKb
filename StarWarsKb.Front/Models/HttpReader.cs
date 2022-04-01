@@ -1,39 +1,43 @@
-﻿
-namespace StarWars.Front.Models;
+﻿using System.IO;
+using System.Net.Http;
+using System.Threading.Tasks;
 
-public class HttpReader : IHttpReader
+namespace StarWarsKb.Front.Models
 {
-    private readonly IHttpClientFactory _httpClientFactory;
-
-    public HttpReader(IHttpClientFactory httpClientFactory)
+    public class HttpReader : IHttpReader
     {
-        _httpClientFactory = httpClientFactory;
-    }
-    
-    public string ErrorMessage => "Error";
+        private readonly IHttpClientFactory _httpClientFactory;
 
-    public async Task<string> GetJsonStringByUrl(string apiUrl)
-    {
-        var requestMessage = new HttpRequestMessage(HttpMethod.Get, apiUrl);
-        var httpClient = _httpClientFactory.CreateClient();
-        var httpResponseMessage = await httpClient.SendAsync(requestMessage);
-
-        Task<string> task;
-        
-        if (httpResponseMessage.IsSuccessStatusCode)
+        public HttpReader(IHttpClientFactory httpClientFactory)
         {
-            await using var contentStream =
-                await httpResponseMessage.Content.ReadAsStreamAsync();
-
-            var sr = new StreamReader(contentStream);
-
-            task = sr.ReadToEndAsync();
+            _httpClientFactory = httpClientFactory;
         }
-        else
+
+        public string ErrorMessage => "Error";
+
+        public async Task<string> GetJsonStringByUrl(string apiUrl)
         {
-            task = new Task<string>(()=> ErrorMessage);
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, apiUrl);
+            var httpClient = _httpClientFactory.CreateClient();
+            var httpResponseMessage = await httpClient.SendAsync(requestMessage);
+
+            Task<string> task;
+
+            if (httpResponseMessage.IsSuccessStatusCode)
+            {
+                await using var contentStream =
+                    await httpResponseMessage.Content.ReadAsStreamAsync();
+
+                var sr = new StreamReader(contentStream);
+
+                task = sr.ReadToEndAsync();
+            }
+            else
+            {
+                task = new Task<string>(() => ErrorMessage);
+            }
+
+            return await task;
         }
-        
-        return await task;
     }
 }

@@ -1,43 +1,46 @@
-﻿using System.Text.Json;
-using StarWars.Infrastructure.Model;
+﻿using System.Collections.Generic;
+using System.Text.Json;
+using System.Threading.Tasks;
+using StarWarsKb.Infrastructure.Model;
 
-namespace StarWars.Front.Models;
-
-public class CharactersReader : ICharactersReader
+namespace StarWarsKb.Front.Models
 {
-    private readonly IHttpReader _httpReader;
-
-    private readonly JsonSerializerOptions? _options = new()
+    public class CharactersReader : ICharactersReader
     {
-        AllowTrailingCommas = true,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-    };
+        private readonly IHttpReader _httpReader;
 
-    public CharactersReader(IHttpReader httpReader)
-    {
-        _httpReader = httpReader;
-    }
+        private readonly JsonSerializerOptions _options = new JsonSerializerOptions()
+        {
+            AllowTrailingCommas = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
 
-    public Task<IList<Character>> Characters()
-    {
-        return GetAllAsync();
-    }
+        public CharactersReader(IHttpReader httpReader)
+        {
+            _httpReader = httpReader;
+        }
 
-    public async Task<Character> GetById(int id)
-    {
-        var str = await _httpReader.GetJsonStringByUrl($@"https://localhost:7131/Characters/{id}");
+        public Task<IList<Character>> Characters()
+        {
+            return GetAllAsync();
+        }
 
-        if (str == _httpReader.ErrorMessage) return await new Task<Character>(() => new Character());
+        public async Task<Character> GetById(int id)
+        {
+            var str = await _httpReader.GetJsonStringByUrl($@"https://localhost:7131/Characters/{id}");
 
-        return JsonSerializer.Deserialize<Character>(str, _options);
-    }
+            if (str == _httpReader.ErrorMessage) return await new Task<Character>(() => new Character());
 
-    private async Task<IList<Character>> GetAllAsync()
-    {
-        var str = await _httpReader.GetJsonStringByUrl(@"https://localhost:7131/Characters");
+            return JsonSerializer.Deserialize<Character>(str, _options);
+        }
 
-        if (str == _httpReader.ErrorMessage) return await new Task<IList<Character>>(() => new List<Character>());
+        private async Task<IList<Character>> GetAllAsync()
+        {
+            var str = await _httpReader.GetJsonStringByUrl(@"https://localhost:7131/Characters");
 
-        return JsonSerializer.Deserialize<IList<Character>>(str, _options);
+            if (str == _httpReader.ErrorMessage) return await new Task<IList<Character>>(() => new List<Character>());
+
+            return JsonSerializer.Deserialize<IList<Character>>(str, _options);
+        }
     }
 }

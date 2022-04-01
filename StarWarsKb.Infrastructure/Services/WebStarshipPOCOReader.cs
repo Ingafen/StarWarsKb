@@ -1,11 +1,11 @@
-using StarWars.Infrastructure.Services.POCO;
+using StarWarsKb.Infrastructure.Services.POCO;
 
-namespace StarWars.Infrastructure.Services;
-
-public class WebStarshipPOCOReader : WebPOCOReader<StarshipPOCO>, IWebReader<StarshipPOCO>
+namespace StarWarsKb.Infrastructure.Services
 {
-    public WebStarshipPOCOReader() : base("starships")
+    public class WebStarshipPOCOReader : WebPOCOReader<StarshipPOCO>, IWebReader<StarshipPOCO>
     {
-        
+        public WebStarshipPOCOReader() : base("starships")
+        {
+        }
     }
 }

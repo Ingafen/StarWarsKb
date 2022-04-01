@@ -1,9 +1,12 @@
-﻿using StarWars.Infrastructure.Model;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using StarWarsKb.Infrastructure.Model;
 
-namespace StarWars.Front.Models;
-
-public interface ICharactersReader
+namespace StarWarsKb.Front.Models
 {
-    Task<IList<Character>> Characters();
-    Task<Character> GetById(int id);
+    public interface ICharactersReader
+    {
+        Task<IList<Character>> Characters();
+        Task<Character> GetById(int id);
+    }
 }

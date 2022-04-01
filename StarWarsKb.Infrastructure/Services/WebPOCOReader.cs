@@ -1,26 +1,28 @@
+using System.Net.Http;
 using System.Text.Json;
-using StarWars.Infrastructure.Services.POCO;
+using StarWarsKb.Infrastructure.Services.POCO;
 
-namespace StarWars.Infrastructure.Services;
-
-public abstract class WebPOCOReader<T> where T: IStarWarPOCOEntity
+namespace StarWarsKb.Infrastructure.Services
 {
-    private HttpClient _client;
-    private const string BaseUrl = @"https://swapi.dev/api/";
-    private string subURL { get; }
-
-    protected WebPOCOReader(string sub)
+    public abstract class WebPOCOReader<T> where T : IStarWarPOCOEntity
     {
-        _client = new HttpClient();
-        subURL = sub;
-    }
+        private HttpClient _client;
+        private const string BaseUrl = @"https://swapi.dev/api/";
+        private string subURL { get; }
 
-    public T? ReadEntityWithId(int id)
-    {
-        var task = _client.GetStringAsync($"{BaseUrl}{subURL}/{id}/");
+        protected WebPOCOReader(string sub)
+        {
+            _client = new HttpClient();
+            subURL = sub;
+        }
 
-        var poco = JsonSerializer.Deserialize<T>(task.Result);
+        public T ReadEntityWithId(int id)
+        {
+            var task = _client.GetStringAsync($"{BaseUrl}{subURL}/{id}/");
 
-        return poco;
+            var poco = JsonSerializer.Deserialize<T>(task.Result);
+
+            return poco;
+        }
     }
 }

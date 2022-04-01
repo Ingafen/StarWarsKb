@@ -1,9 +1,11 @@
-﻿using StarWars.Infrastructure.Model;
+﻿using System.Collections.Generic;
+using StarWarsKb.Infrastructure.Model;
 
-namespace StarWars.Back.Model;
-
-public interface ICharactersRepository
+namespace StarWarsKb.Back.Model
 {
-    IList<Character> GetAll();
-    Character GetById(int id);
+    public interface ICharactersRepository
+    {
+        IList<Character> GetAll();
+        Character GetById(int id);
+    }
 }

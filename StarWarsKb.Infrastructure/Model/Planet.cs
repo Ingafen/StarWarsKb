@@ -1,6 +1,12 @@
-﻿namespace StarWars.Infrastructure.Model;
+﻿using System.Collections.Generic;
+using StarWars.Infrastructure.Model;
 
-public class Planet
+namespace StarWarsKb.Infrastructure.Model
 {
-    public string Name { get; set; }
+    public class Planet : IStarWarsEntity
+    {
+        public string Name { get; set; }
+        public IList<Character> Residents { get; set; }
+        public int StarWarId { get; set; }
+    }
 }

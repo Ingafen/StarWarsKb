@@ -1,7 +1,11 @@
-﻿namespace StarWars.Infrastructure.Model;
+﻿using StarWars.Infrastructure.Model;
 
-public class Film
+namespace StarWarsKb.Infrastructure.Model
 {
-    public string Title { get; set; }
-    public int EpisodeId { get; set; }
+    public class Film : IStarWarsEntity
+    {
+        public string Title { get; set; }
+        public int EpisodeId { get; set; }
+        public int StarWarId { get; set; }
+    }
 }

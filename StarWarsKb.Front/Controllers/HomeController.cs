@@ -20,6 +20,8 @@ namespace StarWarsKb.Front.Controllers
 
         public IActionResult Index()
         {
+            ViewData["HelloMsg"] = "Hello!";
+            
             return View();
         }
 

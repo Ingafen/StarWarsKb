@@ -1,7 +1,10 @@
-﻿namespace StarWars.Front.Models;
+﻿using System.Threading.Tasks;
 
-public interface IHttpReader
+namespace StarWarsKb.Front.Models
 {
-    Task<string> GetJsonStringByUrl(string url);
-    string ErrorMessage { get; }
+    public interface IHttpReader
+    {
+        Task<string> GetJsonStringByUrl(string url);
+        string ErrorMessage { get; }
+    }
 }
