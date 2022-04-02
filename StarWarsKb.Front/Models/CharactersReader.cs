@@ -27,7 +27,7 @@ namespace StarWarsKb.Front.Models
 
         public async Task<Character> GetById(int id)
         {
-            var str = await _httpReader.GetJsonStringByUrl($@"https://localhost:7131/Characters/{id}");
+            var str = await _httpReader.GetJsonStringByUrl($@"https://localhost:5001/Characters/{id}");
 
             if (str == _httpReader.ErrorMessage) return await new Task<Character>(() => new Character());
 
@@ -36,7 +36,7 @@ namespace StarWarsKb.Front.Models
 
         private async Task<IList<Character>> GetAllAsync()
         {
-            var str = await _httpReader.GetJsonStringByUrl(@"https://localhost:7131/Characters");
+            var str = await _httpReader.GetJsonStringByUrl(@"https://localhost:5001/Characters");
 
             if (str == _httpReader.ErrorMessage) return await new Task<IList<Character>>(() => new List<Character>());
 

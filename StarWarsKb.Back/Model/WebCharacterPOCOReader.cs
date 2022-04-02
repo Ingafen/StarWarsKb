@@ -1,7 +1,6 @@
-using StarWarsKb.Infrastructure.Services;
-using StarWarsKb.Infrastructure.Services.POCO;
+using StarWarsKb.Back.Model.POCO;
 
-namespace StarWars.Infrastructure.Services
+namespace StarWarsKb.Back.Model
 {
     public class WebCharacterPOCOReader : WebPOCOReader<CharacterPOCO>, IWebReader<CharacterPOCO>
     {
@@ -9,7 +8,5 @@ namespace StarWars.Infrastructure.Services
         {
 
         }
-
-
     }
 }

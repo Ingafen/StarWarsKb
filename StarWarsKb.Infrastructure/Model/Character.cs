@@ -12,6 +12,7 @@ namespace StarWarsKb.Infrastructure.Model
             Species = new List<Spec>();
             Vehicles = new List<Vehicle>();
             Starships = new List<Starship>();
+            StarshipCharacters = new List<StarshipsCharacters>();
         }
         
         [NotMapped]

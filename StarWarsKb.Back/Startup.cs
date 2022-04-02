@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using StarWarsKb.Back.Model;
+using StarWarsKb.Infrastructure.Model;
 
 namespace StarWarsKb.Back
 {
@@ -26,6 +28,10 @@ namespace StarWarsKb.Back
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddTransient<IBaseRepository<Character>, CharactersRepository>();
+            services.AddDbContext<ApplicationDbContext>();
+            services.AddTransient<IBaseRepository<Starship>, StarshipsRepository>();
+            services.AddTransient<IBaseRepository<Planet>, PlanetsRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

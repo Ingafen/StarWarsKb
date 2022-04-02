@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 
-namespace StarWarsKb.Infrastructure.Services.POCO
+namespace StarWarsKb.Back.Model.POCO
 {
     public class StarshipPOCO : IStarWarPOCOEntity
     {
+        public int id { get; set; }
         public string name { get; set; }
         public string model { get; set; }
         public string manufacturer { get; set; }
@@ -23,5 +24,10 @@ namespace StarWarsKb.Infrastructure.Services.POCO
         public DateTime created { get; set; }
         public DateTime edited { get; set; }
         public string url { get; set; }
+
+        public override string ToString()
+        {
+            return name;
+        }
     }
 }

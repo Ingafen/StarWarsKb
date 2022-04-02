@@ -25,7 +25,7 @@ namespace StarWarsKb.Front
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddTransient<ICharactersReader, StubCharactersReader>();
+            services.AddTransient<ICharactersReader, CharactersReader>();
             services.AddTransient<IReportReader, StubReportReader>();
             services.AddHttpClient();
             services.AddTransient<IHttpReader, HttpReader>();

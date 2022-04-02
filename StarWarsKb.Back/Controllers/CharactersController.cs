@@ -9,9 +9,9 @@ namespace StarWarsKb.Back.Controllers
     [Route("[controller]")]
     public class CharactersController : ControllerBase
     {
-        private readonly ICharactersRepository _charactersRepository;
+        private readonly IBaseRepository<Character> _charactersRepository;
 
-        public CharactersController(ICharactersRepository charactersRepository)
+        public CharactersController(IBaseRepository<Character> charactersRepository)
         {
             _charactersRepository = charactersRepository;
         }
@@ -20,6 +20,10 @@ namespace StarWarsKb.Back.Controllers
         public IList<Character> Get() => _charactersRepository.GetAll();
 
         [HttpGet("{id}")]
-        public Character Get(int id) => _charactersRepository.GetById(id);
+        public Character Get(int id)
+        {
+            var byId = _charactersRepository.GetById(id);
+            return byId;
+        }
     }
 }

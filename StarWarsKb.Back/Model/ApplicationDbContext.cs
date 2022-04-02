@@ -47,7 +47,6 @@ namespace StarWarsKb.Back.Model
                 .WithOne(ch => ch.HomeWorld)
                 .HasForeignKey(ch1 => ch1.HomeWorldId);
             
-            
             modelBuilder.Entity<Starship>().HasKey(x => x.StarWarId);
         }
     }

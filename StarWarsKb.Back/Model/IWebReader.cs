@@ -1,6 +1,6 @@
-using StarWarsKb.Infrastructure.Services.POCO;
+using StarWarsKb.Back.Model.POCO;
 
-namespace StarWarsKb.Infrastructure.Services
+namespace StarWarsKb.Back.Model
 {
     public interface IWebReader<T> where T : IStarWarPOCOEntity
     {

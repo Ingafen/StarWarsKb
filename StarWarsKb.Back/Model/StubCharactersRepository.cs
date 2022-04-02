@@ -4,7 +4,7 @@ using StarWarsKb.Infrastructure.Model;
 
 namespace StarWarsKb.Back.Model
 {
-    public class StubCharactersRepository : ICharactersRepository
+    public class StubCharactersRepository : IBaseRepository<Character>
     {
         private IList<Character> _list;
 
@@ -67,6 +67,16 @@ namespace StarWarsKb.Back.Model
         public Character GetById(int id)
         {
             return _list.First(x => x.StarWarId == id);
+        }
+
+        public void Save(Character c)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Save(IList<Character> characters)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
