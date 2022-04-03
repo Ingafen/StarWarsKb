@@ -6,6 +6,6 @@ namespace StarWarsKb.Front.Models
 {
     public interface IReportReader
     {
-        public Task<IList<Character>> GetReport();
+        public Task<IList<ReportEntity>> GetReport();
     }
 }

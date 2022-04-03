@@ -1,4 +1,4 @@
-﻿@model IList<StarWarsKb.Infrastructure.Model.Character> 
+﻿@model IList<StarWarsKb.Infrastructure.Model.ReportEntity> 
 @{
     ViewBag.Title = "Ships report";
     Layout = "_Layout";
@@ -11,15 +11,15 @@
     {
         <li class="list-group-item d-flex justify-content-between align-items-start">
             <div class="ms-2 me-auto">
-                <div class="fw-bold">@c.Name</div>
+                <div class="fw-bold">@c.CharacterName</div>
                 <ul>
                     @foreach (var ship in c.Starships)
                     {
-                        <li class="opacity-50"><b>@ship.Model</b> - @ship.Name</li>
+                        <li class="opacity-50"><b>@ship.Model</b> - @ship.Name - @ship.CargoCapacity</li>
                     }
                 </ul>
             </div>
-            <span class="badge bg-primary rounded-pill">йух</span>
+            <span class="badge bg-primary rounded-pill">@c.TotalCapacity</span>
         </li>
     }
 </ol>

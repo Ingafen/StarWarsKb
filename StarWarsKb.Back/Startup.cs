@@ -32,6 +32,7 @@ namespace StarWarsKb.Back
             services.AddDbContext<ApplicationDbContext>();
             services.AddTransient<IBaseRepository<Starship>, StarshipsRepository>();
             services.AddTransient<IBaseRepository<Planet>, PlanetsRepository>();
+            services.AddTransient<IReportGenerator, ReportGenerator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

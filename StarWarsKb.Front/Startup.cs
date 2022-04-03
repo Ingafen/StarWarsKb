@@ -26,7 +26,7 @@ namespace StarWarsKb.Front
         {
             services.AddControllersWithViews();
             services.AddTransient<ICharactersReader, CharactersReader>();
-            services.AddTransient<IReportReader, StubReportReader>();
+            services.AddTransient<IReportReader, ReportReader>();
             services.AddHttpClient();
             services.AddTransient<IHttpReader, HttpReader>();
         }
