@@ -6,12 +6,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using StarWarsKb.Back.Model;
 using StarWarsKb.Infrastructure.Model;
+using StarWarsKb.Infrastructure.Services;
 
 namespace StarWarsKb.Back
 {
@@ -29,6 +31,7 @@ namespace StarWarsKb.Back
         {
             services.AddControllers();
             services.AddTransient<IBaseRepository<Character>, CharactersRepository>();
+            services.AddTransient<IParamService, ParamService>();
             services.AddDbContext<ApplicationDbContext>();
             services.AddTransient<IBaseRepository<Starship>, StarshipsRepository>();
             services.AddTransient<IBaseRepository<Planet>, PlanetsRepository>();

@@ -2,12 +2,14 @@
 using System.Text.Json;
 using System.Threading.Tasks;
 using StarWarsKb.Infrastructure.Model;
+using StarWarsKb.Infrastructure.Services;
 
 namespace StarWarsKb.Front.Models
 {
     public class CharactersReader : ICharactersReader
     {
         private readonly IHttpReader _httpReader;
+        private readonly IParamService _paramService;
 
         private readonly JsonSerializerOptions _options = new JsonSerializerOptions()
         {
@@ -15,9 +17,10 @@ namespace StarWarsKb.Front.Models
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
 
-        public CharactersReader(IHttpReader httpReader)
+        public CharactersReader(IHttpReader httpReader, IParamService paramService)
         {
             _httpReader = httpReader;
+            _paramService = paramService;
         }
 
         public Task<IList<Character>> Characters()
@@ -27,7 +30,7 @@ namespace StarWarsKb.Front.Models
 
         public async Task<Character> GetById(int id)
         {
-            var str = await _httpReader.GetJsonStringByUrl($@"https://localhost:5001/Characters/{id}");
+            var str = await _httpReader.GetJsonStringByUrl(_paramService.GetParam("SWKB-back-address")+$@"/Characters/{id}");
 
             if (str == _httpReader.ErrorMessage) return await new Task<Character>(() => new Character());
 
@@ -36,7 +39,7 @@ namespace StarWarsKb.Front.Models
 
         private async Task<IList<Character>> GetAllAsync()
         {
-            var str = await _httpReader.GetJsonStringByUrl(@"https://localhost:5001/Characters");
+            var str = await _httpReader.GetJsonStringByUrl(_paramService.GetParam("SWKB-back-address") + @"/Characters");
 
             if (str == _httpReader.ErrorMessage) return await new Task<IList<Character>>(() => new List<Character>());
 

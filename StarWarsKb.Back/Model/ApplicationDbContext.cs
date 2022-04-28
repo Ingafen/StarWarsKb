@@ -1,21 +1,27 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StarWarsKb.Infrastructure.Model;
+using StarWarsKb.Infrastructure.Services;
 
 namespace StarWarsKb.Back.Model
 {
     public class ApplicationDbContext : DbContext
     {
+        private readonly IParamService _paramService;
         public DbSet<Character> Characters { get; set; }
         public DbSet<Film> Films { get; set; }
         public DbSet<Planet> Planets { get; set; }        
         public DbSet<Starship> Starships { get; set; }
         public DbSet<StarshipsCharacters> StarshipsCharacters { get; set; }
+
+        public ApplicationDbContext(IParamService paramService)
+        {
+            _paramService = paramService;
+        }
         
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            var connectionString = "Host=localhost;Database=StarWarsKb;Username=postgres;Password=454119;Port=5432";
-            optionsBuilder.UseNpgsql(connectionString);
+            optionsBuilder.UseNpgsql(_paramService.GetParam("SWKB-back-cs"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

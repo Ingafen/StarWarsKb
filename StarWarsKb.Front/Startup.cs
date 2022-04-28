@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using StarWarsKb.Front.Models;
+using StarWarsKb.Infrastructure.Services;
+using ParamService = StarWarsKb.Infrastructure.Services.ParamService;
 
 namespace StarWarsKb.Front
 {
@@ -25,6 +22,7 @@ namespace StarWarsKb.Front
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddTransient<IParamService, ParamService>();
             services.AddTransient<ICharactersReader, CharactersReader>();
             services.AddTransient<IReportReader, ReportReader>();
             services.AddHttpClient();
@@ -55,8 +53,8 @@ namespace StarWarsKb.Front
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    "default",
+                    "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

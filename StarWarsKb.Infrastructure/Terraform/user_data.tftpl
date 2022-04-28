@@ -1,0 +1,71 @@
+﻿#!/bin/sh
+apt update
+apt install mc vim git python3-pip -y
+
+git clone https://github.com/kubernetes-sigs/kubespray.git
+cd kubespray
+pip3 install -r requirements.txt
+
+date >> log.txt
+
+echo "Create public key" >> log.txt
+cat <<EOT > id_rsa.pub
+${public_key}
+EOT
+
+echo "Create private key" >> log.txt
+cat <<EOT > id_rsa
+${private_key}
+EOT
+
+echo "Change permissions and owners to ssh keys" >> log.txt
+chmod 400 id_rsa
+chmod 400 id_rsa.pub
+chown ${user_name} id_rsa
+chown ${user_name} id_rsa.pub
+
+echo "Create Ansible config file" >> log.txt
+cat <<EOT > ansible.cfg
+[defaults]
+remote_user = ${user_name}
+host_key_checking = False
+private_key_file = id_rsa
+
+[privilege_escalation]
+become=True
+become_method=sudo
+become_user=root
+become_ask_pass=False
+EOT
+
+echo "Create Ansible inventory file" >> log.txt
+cat <<EOT > my-inventory.ini
+[k8s-cluster:children]
+kube-master
+kube-node
+calico_rr
+
+[all]
+${master_name} ansible_host=${master_ip} ip=${master_ip}
+%{ for hostname, ip in worker_ips }${hostname} ansible_host=${ip} ip=${ip}
+%{ endfor ~}
+
+[kube-master]
+${master_name}
+
+[kube-node]
+%{ for hostname, ip in worker_ips }${hostname} ansible_host=${ip} ip=${ip}
+%{ endfor ~}
+
+[etcd]
+${master_name}
+
+[calico-rr]
+
+EOT
+
+ansible-playbook -i my-inventory.ini cluster.yml
+
+date >> log.txt
+
+echo "Master ip is ${master_ip}"
