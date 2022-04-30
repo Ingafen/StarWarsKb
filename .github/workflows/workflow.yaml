@@ -21,7 +21,7 @@ jobs:
          target: ReleaseBuildAll
          verbosity: Normal
          cake-version: 2.2.0
-         cake-bootstrap: true
+         cake-bootstrap: false
       - name: Run unit tests
         uses: cake-build/cake-action@v1
         with:
@@ -29,4 +29,4 @@ jobs:
           target: Test
           verbosity: Normal
           cake-version: 2.2.0
-          cake-bootstrap: true
+          cake-bootstrap: false
