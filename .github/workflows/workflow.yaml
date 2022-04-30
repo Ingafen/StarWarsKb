@@ -16,17 +16,21 @@ jobs:
           dotnet-version: '3.1.x'
       - name: Build project
         uses: cake-build/cake-action@v1
+        env:
+          EXPECTED_VERBOSITY: Diagnostic
         with:
          script-path: recipe.cake
          target: ReleaseBuildAll
          verbosity: Normal
          cake-version: 2.2.0
-         cake-bootstrap: false
+         cake-bootstrap: true
       - name: Run unit tests
         uses: cake-build/cake-action@v1
+        env:
+          EXPECTED_VERBOSITY: Diagnostic
         with:
           script-path: recipe.cake
           target: Test
           verbosity: Normal
           cake-version: 2.2.0
-          cake-bootstrap: false
+          cake-bootstrap: true
