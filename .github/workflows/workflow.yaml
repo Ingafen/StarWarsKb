@@ -1,0 +1,30 @@
+﻿name: Workflow
+on: 
+  push:
+    branches:
+      - master
+jobs:
+  build_and_test:
+    name: build_and_test
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v1
+      - name: Install .net core 3.1
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '3.1.x'
+      - name: Build project
+        uses: cake-build/cake-action@v1
+        with:
+         script-path: recipe.cake
+         target: ReleaseBuildAll
+         verbosity: Normal
+         cake-version: 2.2.0
+      - name: Run unit tests
+        uses: cake-build/cake-action@v1
+        with:
+          script-path: recipe.cake
+          target: Test
+          verbosity: Normal
+          cake-version: 2.2.0

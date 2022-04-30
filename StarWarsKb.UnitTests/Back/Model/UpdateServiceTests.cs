@@ -37,6 +37,15 @@ namespace StarWarsKb.UnitTests.Back.Model
             _mockStarshipsRepository = new Mock<IBaseRepository<Starship>>();
             _mockPlanetsRepository = new Mock<IBaseRepository<Planet>>();
             _mockPlanetService = new Mock<IPlanetService>();
+
+            _mockCharacterWebReader.Setup(x => x.ReadEntityWithId(It.IsAny<int>()))
+                .Returns(new CharacterPOCO {name = "EMPTY"});
+
+            _mockPlanetWebReader.Setup(x => x.ReadEntityWithId(It.IsAny<int>()))
+                .Returns(new PlanetPOCO {name = "EMPTY"});
+
+            _mockStarshipWebReader.Setup(x => x.ReadEntityWithId(It.IsAny<int>()))
+                .Returns(new StarshipPOCO{name = "EMPTY"});
             
             IUpdateService updateService = new UpdateService(_mockCharacterWebReader.Object, 
                 _mockStarshipWebReader.Object,
@@ -52,19 +61,19 @@ namespace StarWarsKb.UnitTests.Back.Model
             updateService.CreateData();
         }
 
-        [Fact(Skip = "")]
+        [Fact]
         public void PlanetReaderCalledAtLeastOnce()
         {
             _mockPlanetWebReader.Verify(x => x.ReadEntityWithId(It.IsAny<int>()), Times.AtLeast(1));
         }
 
-        [Fact(Skip = "")]
+        [Fact]
         public void StarshipWebReaderCalledAtLeastOnce()
         {
             _mockStarshipWebReader.Verify(x => x.ReadEntityWithId(It.IsAny<int>()), Times.AtLeast(1));
         }
 
-        [Fact(Skip = "")]
+        [Fact]
         public void CharacterWebReaderCalledAtLeastOnce()
         {
             _mockCharacterWebReader.Verify(x => x.ReadEntityWithId(It.IsAny<int>()), Times.AtLeast(1));
