@@ -38,10 +38,10 @@ jobs:
         with:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/swkb-front:latest
-          context: StarWarsKb.Front/.
+          file: StarWarsKb.Front/Dockerfile
       - name: Build back-end and push to hub
         uses: docker/build-push-action@v2
         with:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/swkb-back:latest
-          context: StarWarsKb.Back/.
+          file: StarWarsKb.Back/Dockerfile
