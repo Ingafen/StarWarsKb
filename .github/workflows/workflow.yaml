@@ -14,22 +14,12 @@ jobs:
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: '3.1.x'
-      - name: Build project
+      - name: Rebuild and run unit tests
         uses: cake-build/cake-action@v1
         env:
           EXPECTED_VERBOSITY: Diagnostic
         with:
-         script-path: recipe.cake
-         target: ReleaseBuildAll
-         verbosity: Normal
-         cake-version: 2.2.0
-         cake-bootstrap: true
-      - name: Run unit tests
-        uses: cake-build/cake-action@v1
-        env:
-          EXPECTED_VERBOSITY: Diagnostic
-        with:
-          script-path: recipe.cake
+          script-path: build.cake
           target: Test
           verbosity: Normal
           cake-version: 2.2.0

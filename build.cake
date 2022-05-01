@@ -39,6 +39,7 @@ Task("Test")
     {
         Configuration = configuration,
         NoBuild = true,
+        
     });
 });
 
