@@ -48,12 +48,17 @@ variable "worker_nodes_count" {
 
 variable "master_size" {
   type = number
-  default = 10
+  default = 20
   description = "Size of master storage"
 }
 
 variable "worker_size" {
   type = number
-  default = 10
+  default = 20
   description = "Size of worker storage"
+}
+
+variable "region_id" {
+  type = string
+  default = "ru-central1"
 }
