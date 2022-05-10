@@ -72,7 +72,15 @@ ansible-playbook -i inventory/ingafen/my-inventory.ini cluster.yml
 
 cat <<EOT > master.sh
 export KUBECONFIG=/etc/kubernetes/admin.conf
-chown ubuntu:ubuntu /etc/kubernetes/admin.conf 
+chown ubuntu:ubuntu /etc/kubernetes/admin.conf
+
+kubectl taint node sonarqubenode sonarqube=true:NoSchedule
+kubectl label node sonarqubenode sonarqube=true
+helm repo add sonarqube https://SonarSource.github.io/helm-chart-sonarqube
+helm repo update
+kubectl create namespace sonarqube
+helm upgrade --install -n sonarqube sonarqube sonarqube/sonarqube
+
 
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
@@ -85,6 +93,7 @@ chmod +x /usr/local/bin/argocd
 EOT
 
 ssh -i id_rsa -o StrictHostKeyChecking=no ubuntu@192.168.21.12 ls
+
 
 date >> log.txt
 
