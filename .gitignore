@@ -3,3 +3,6 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+.idea/*
+StarWarsKb.Infrastructure/Terraform/terraform.tfstate
+StarWarsKb.Infrastructure/Terraform/terraform.tfstate.backup
