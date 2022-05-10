@@ -1,6 +1,9 @@
 //ARGUMENTS
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
+var infrBaseDir = Argument("infrBaseDir", "StarWarsKb.Infrastructure");
+var backBaseDir = Argument("backBaseDir", "StarWarsKb.Back");
+var frontBaseDir = Argument("frontBaseDir", "StarWarsKb.Front");
 
 //PREPARATION
 
