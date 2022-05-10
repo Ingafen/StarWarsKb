@@ -1,9 +1,6 @@
 //ARGUMENTS
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
-var infrBaseDir = Argument("infrBaseDir", "StarWarsKb.Infrastructure");
-var backBaseDir = Argument("backBaseDir", "StarWarsKb.Back");
-var frontBaseDir = Argument("frontBaseDir", "StarWarsKb.Front");
 
 //PREPARATION
 
@@ -13,10 +10,10 @@ Task("CleanAllOutputDirs")
 {
     CleanDirectory($"./{infrBaseDir}/bin/{configuration}");
     Information($"clean {infrBaseDir} output dir");
-    
+
     CleanDirectory($"./{backBaseDir}/bin/{configuration}");
     Information($"clean {backBaseDir} output dir");
-       
+
     CleanDirectory($"./{frontBaseDir}/bin/{configuration}");
     Information($"clean {frontBaseDir} output dir");
 });

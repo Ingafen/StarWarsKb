@@ -1,6 +1,6 @@
 ﻿#!/bin/sh
 apt update
-apt install mc vim git python3-pip -y
+apt install mc vim git python3-pip apt-transport-https ca-certificates curl -y
 
 git clone https://github.com/kubernetes-sigs/kubespray.git
 cd kubespray
@@ -66,7 +66,36 @@ ${master_name}
 
 EOT
 
-ansible-playbook -i my-inventory.ini cluster.yml
+mkdir inventory/ingafen
+cp -r inventory/sample/group_vars/ inventory/ingafen/group_vars/
+cp my-inventory.ini inventory/ingafen/
+sed -i 's/helm_enabled: false/helm_enabled: true/' inventory/ingafen/group_vars/k8s_cluster/addons.yml
+ansible-playbook -i inventory/ingafen/my-inventory.ini cluster.yml
+
+cat <<EOT > master.sh
+export KUBECONFIG=/etc/kubernetes/admin.conf
+chown ubuntu:ubuntu /etc/kubernetes/admin.conf
+
+kubectl taint node sonarqubenode sonarqube=true:NoSchedule
+kubectl label node sonarqubenode sonarqube=true
+helm repo add sonarqube https://SonarSource.github.io/helm-chart-sonarqube
+helm repo update
+kubectl create namespace sonarqube
+helm upgrade --install -n sonarqube sonarqube sonarqube/sonarqube
+
+
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort"}}'
+
+curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+chmod +x /usr/local/bin/argocd
+
+
+EOT
+
+ssh -i id_rsa -o StrictHostKeyChecking=no ubuntu@192.168.21.12 ls
+
 
 date >> log.txt
 
