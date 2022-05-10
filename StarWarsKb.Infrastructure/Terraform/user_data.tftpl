@@ -47,6 +47,7 @@ calico_rr
 
 [all]
 ${master_name} ansible_host=${master_ip} ip=${master_ip}
+${sonar_node_name} ansible_host=${sonar_node_ip} ip=${sonar_node_ip}
 %{ for hostname, ip in worker_ips }${hostname} ansible_host=${ip} ip=${ip}
 %{ endfor ~}
 
@@ -54,6 +55,7 @@ ${master_name} ansible_host=${master_ip} ip=${master_ip}
 ${master_name}
 
 [kube-node]
+${sonar_node_name} ansible_host=${sonar_node_ip} ip=${sonar_node_ip}
 %{ for hostname, ip in worker_ips }${hostname} ansible_host=${ip} ip=${ip}
 %{ endfor ~}
 
