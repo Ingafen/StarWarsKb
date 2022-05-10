@@ -44,6 +44,8 @@ resource "yandex_compute_instance" "bastion" {
       user_name = var.user_name
       public_key = file(var.public_key_path)
       private_key = file(var.private_key_path)
+      sonar_node_name = yandex_compute_instance.sonarqubenode.hostname
+      sonar_node_ip = yandex_compute_instance.sonarqubenode.network_interface.0.ip_address
     } )
     ssh-keys = join(":", [var.user_name, file(var.public_key_path)])
   }
@@ -66,6 +68,29 @@ resource "yandex_compute_instance" "master" {
   resources {
     cores  = 2
     memory = 2
+  }
+  metadata = {
+    user-data = "apt-get update"
+    ssh-keys = join(":", [var.user_name, file(var.public_key_path)])
+  }
+}
+resource "yandex_compute_instance" "sonarqubenode" {
+  platform_id = "standard-v1"
+  hostname = var.sonarqubenode
+  name = var.sonarqubenode
+  boot_disk {
+    initialize_params {
+      image_id = var.image_id
+      size = 20
+    }
+  }
+  network_interface {
+    subnet_id = yandex_vpc_subnet.public_subnet.id
+    nat = true
+  }
+  resources {
+    cores  = 2
+    memory = 6
   }
   metadata = {
     user-data = "apt-get update"
