@@ -65,6 +65,29 @@ resource "yandex_compute_instance" "master" {
   }
   resources {
     cores  = 2
+    memory = 2
+  }
+  metadata = {
+    user-data = "apt-get update"
+    ssh-keys = join(":", [var.user_name, file(var.public_key_path)])
+  }
+}
+resource "yandex_compute_instance" "sonarqubenode" {
+  platform_id = "standard-v1"
+  hostname = "sonarqubenode"
+  name = "sonarqubenode"
+  boot_disk {
+    initialize_params {
+      image_id = var.image_id
+      size = 20
+    }
+  }
+  network_interface {
+    subnet_id = yandex_vpc_subnet.public_subnet.id
+    nat = true
+  }
+  resources {
+    cores  = 2
     memory = 6
   }
   metadata = {
