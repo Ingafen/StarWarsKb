@@ -1,6 +1,6 @@
 ﻿#!/bin/sh
 apt update
-apt install mc vim git python3-pip -y
+apt install mc vim git python3-pip apt-transport-https ca-certificates curl -y
 
 git clone https://github.com/kubernetes-sigs/kubespray.git
 cd kubespray
