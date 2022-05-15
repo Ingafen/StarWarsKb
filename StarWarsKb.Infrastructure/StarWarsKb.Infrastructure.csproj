@@ -4,4 +4,14 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <None Remove="Terraform\terraform.tfstate" />
+      <None Remove="Terraform\terraform.tfstate.backup" />
+      <None Remove="Terraform\.terraform.lock.hcl" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Helm\Back" />
+    </ItemGroup>
+
 </Project>

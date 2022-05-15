@@ -1,6 +1,6 @@
 ﻿#!/bin/sh
 apt update
-apt install mc vim git python3-pip -y
+apt install mc vim git python3-pip apt-transport-https ca-certificates curl -y
 
 git clone https://github.com/kubernetes-sigs/kubespray.git
 cd kubespray
@@ -47,6 +47,7 @@ calico_rr
 
 [all]
 ${master_name} ansible_host=${master_ip} ip=${master_ip}
+${sonar_node_name} ansible_host=${sonar_node_ip} ip=${sonar_node_ip}
 %{ for hostname, ip in worker_ips }${hostname} ansible_host=${ip} ip=${ip}
 %{ endfor ~}
 
@@ -54,6 +55,7 @@ ${master_name} ansible_host=${master_ip} ip=${master_ip}
 ${master_name}
 
 [kube-node]
+${sonar_node_name} ansible_host=${sonar_node_ip} ip=${sonar_node_ip}
 %{ for hostname, ip in worker_ips }${hostname} ansible_host=${ip} ip=${ip}
 %{ endfor ~}
 
@@ -70,9 +72,27 @@ cp my-inventory.ini inventory/ingafen/
 sed -i 's/helm_enabled: false/helm_enabled: true/' inventory/ingafen/group_vars/k8s_cluster/addons.yml
 ansible-playbook -i inventory/ingafen/my-inventory.ini cluster.yml
 
+cat <<EOT > sonar-values.yaml
+tolerations: 
+  - key: "sonarqube"
+    operator: "Equal"
+    value: "true"
+    effect: "NoSchedule"
+nodeSelector: 
+  sonarqube: "true"
+postgresql.persistence.enabled: "false"
+EOT
+
 cat <<EOT > master.sh
 export KUBECONFIG=/etc/kubernetes/admin.conf
-chown ubuntu:ubuntu /etc/kubernetes/admin.conf 
+chown ubuntu:ubuntu /etc/kubernetes/admin.conf
+
+kubectl taint node sonarqubenode sonarqube=true:NoSchedule
+kubectl label node sonarqubenode sonarqube=true
+helm repo add sonarqube https://SonarSource.github.io/helm-chart-sonarqube
+helm repo update
+kubectl create namespace sonarqube
+helm upgrade --install -n sonarqube -f sonar-values.yaml sonarqube sonarqube/sonarqube
 
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
@@ -81,10 +101,11 @@ kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort"}}'
 curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
 chmod +x /usr/local/bin/argocd
 
-
 EOT
 
-ssh -i id_rsa -o StrictHostKeyChecking=no ubuntu@192.168.21.12 ls
+scp -i id_rsa -o StrictHostKeyChecking=no master.sh ubuntu@${master_name}:master.sh 
+scp -i id_rsa -o StrictHostKeyChecking=no sonar-values.yaml ubuntu@${master_name}:sonar-values.yaml 
+ssh -i id_rsa -o StrictHostKeyChecking=no ubuntu@${master_name} "sudo ./master.sh"
 
 date >> log.txt
 

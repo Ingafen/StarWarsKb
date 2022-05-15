@@ -1,0 +1,9 @@
+﻿apiVersion: v2
+name: StarWarsKb.Front
+version: 0.1.0
+kubeVersion: 1.23
+description: Front-end of StarWars Knowledge Base Web-Application
+type: application
+maintainers:
+    - name: Vedeneev Victor
+      url: https://github.com/Ingafen

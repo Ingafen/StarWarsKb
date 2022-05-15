@@ -29,8 +29,7 @@ By default terraform creates bastion host, 1 master node and 2 worker nodes. You
 
 Output would contain IP of bastion-host.
 
-### Step 3. Create Kubernetes cluster
-
+### Step 3. Create Kubernetes cluster and deploy services
 
 Connect to bastion host by ssh:
 
@@ -40,16 +39,4 @@ After that run installation script (I don't know what was wrong with userdata):
 
 `sudo cp /var/lib/cloud/instance/user-data.txt ~/magic.sh && sudo chmod 755 magic.sh && sudo ./magic.sh`
 
-Connect to master node by ssh (you will get ip in the end of previous step):
-
-`ssh -i id_rsa ubuntu@master-node_ip`
-
-Then:
-
-`export KUBECONFIG=/etc/kubernetes/admin.conf`
-
-`sudo chown ubuntu:ubuntu /etc/kubernetes/admin.conf`
-
-And check Kubernetes installation:
-
-`kubectl get nodes`
+`kubectl`would be installed on master-host.

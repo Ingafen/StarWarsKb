@@ -1,0 +1,21 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: SWKB-front-deployment
+  labels:
+    app: SWKB-front
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: SWKB-front
+  template:
+    metadata:
+      labels:
+        app: SWKB-front
+    spec:
+      containers:
+        - name: SWKB-front
+          image: ingafen/swkb-front
+          ports:
+            - containerPort: 80
