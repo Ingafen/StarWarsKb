@@ -16,3 +16,4 @@ spec:
     - protocol: TCP
       port: {{ .Values.ContainerPort }}
       targetPort: {{ .Values.TargetPort }}
+      name: http
