@@ -12,10 +12,12 @@ spec:
   selector:
     matchLabels:
       app: SWKB-front
+      release: {{ .Release.Name }}
   template:
     metadata:
       labels:
         app: SWKB-front
+        release: {{ .Release.Name }}
     spec:
       containers:
         - name: SWKB-front
