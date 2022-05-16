@@ -1,14 +1,12 @@
 ﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: swkbfrontdeployment
+  name: {{ .Values.Deployment.Name }}
   labels:
     app: {{ .Values.AppName }}
-    chart: helmswkb
     release: {{ .Release.Service }}
-    heritage: {{ .Release.Service }}
 spec:
-  replicas: {{ .Values.Replicas }}
+  replicas: {{ .Values.Deployment.Replicas }}
   selector:
     matchLabels:
       app: {{ .Values.AppName }}
@@ -21,7 +19,7 @@ spec:
     spec:
       containers:
         - name: {{ .Values.AppName }}
-          image: {{ .Values.Image }}  
+          image: {{ .Values.Deployment.Image }}  
           ports:
             - name: http
               containerPort: {{ .Values.ContainerPort }}

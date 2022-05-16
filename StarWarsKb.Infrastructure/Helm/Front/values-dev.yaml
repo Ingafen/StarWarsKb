@@ -1,6 +1,16 @@
-Replicas: 1
-Image: ingafen/swkb-front
+Deployment:
+  Replicas: 1
+  Name: swkb-front-dev
+  Image: ingafen/swkb-front
+Service:
+  Type: NodePort
+  Name: swkb-front-dev
+Autoscaling:
+  Enabled: false
+  Name: swkb-front-hpa
+  MinReplicas: 1
+  MaxReplicas: 10
+  TargetRAMUtilization: 60 
 ContainerPort: 80
 TargetPort: 80
-ServiceType: NodePort
 AppName: swkbfront
