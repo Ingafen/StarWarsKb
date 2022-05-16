@@ -23,12 +23,14 @@ spec:
         - name: {{ .Values.AppName }}
           image: {{ .Values.image }}   
           ports:
-            - containerPort: {{ .Values.ContainerPort }}
+            - name: http
+              containerPort: {{ .Values.ContainerPort }}
+              protocol: TCP
           livenessProbe:
             httpGet:
               path: /
-              port: {{ .Values.ContainerPort}}
+              port: http
           readinessProbe:
             httpGet:
               path: /
-              port: {{ .Values.ContainerPort }}
+              port: http
