@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: SWKB-front-svc
   labels:
-    app: SQKB-front
+    app: SWKB-front
     chart: helm-swkb
     release: {{ .Release.Service }}
     heritage: {{ .Release.Service }}
