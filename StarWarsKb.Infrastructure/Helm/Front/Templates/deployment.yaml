@@ -5,7 +5,7 @@ metadata:
   labels:
     app: SWKB-front
 spec:
-  replicas: 3
+  replicas: {{ .Values.Replicas }}
   selector:
     matchLabels:
       app: SWKB-front
@@ -16,6 +16,14 @@ spec:
     spec:
       containers:
         - name: SWKB-front
-          image: ingafen/swkb-front
+          image: {{ .Values.image }}   
           ports:
-            - containerPort: 80
+            - containerPort: {{ .Values.ContainerPort }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.ContainerPort}}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.ContainerPort }}
