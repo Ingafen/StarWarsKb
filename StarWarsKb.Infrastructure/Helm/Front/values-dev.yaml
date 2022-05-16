@@ -2,3 +2,4 @@ Replicas: 1
 image: ingafen/swkb-front
 ContainerPort: 80
 TargetPort: 8888
+ServiceType: NodePort

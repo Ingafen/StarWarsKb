@@ -4,6 +4,9 @@ metadata:
   name: SWKB-front-deployment
   labels:
     app: SWKB-front
+    chart: helm-swkb
+    release: {{ .Release.Service }}
+    heritage: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.Replicas }}
   selector:
