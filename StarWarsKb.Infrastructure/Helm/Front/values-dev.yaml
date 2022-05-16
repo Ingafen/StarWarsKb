@@ -1,6 +1,6 @@
 Replicas: 1
 Image: ingafen/swkb-front
 ContainerPort: 80
-TargetPort: 8888
+TargetPort: 80
 ServiceType: NodePort
 AppName: swkbfront
