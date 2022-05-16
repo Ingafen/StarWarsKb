@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: SWKB-front-svc
+  name: swkb-front-svc
   labels:
-    app: SWKB-front
+    app: {{ .Values.AppName }}
     chart: helm-swkb
     release: {{ .Release.Service }}
     heritage: {{ .Release.Service }}
 spec:
   type: {{ .Values.ServiceType }}
   selector:
-    app: SWKB-front
+    app: {{ .Values.AppName }}
     release: {{ .Release.Name }}
   ports:
     - protocol: TCP

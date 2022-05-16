@@ -1,9 +1,9 @@
 ﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: SWKB-front-deployment
+  name: swkb-front-deployment
   labels:
-    app: SWKB-front
+    app: {{ .Values.AppName }}
     chart: helm-swkb
     release: {{ .Release.Service }}
     heritage: {{ .Release.Service }}
@@ -11,16 +11,16 @@ spec:
   replicas: {{ .Values.Replicas }}
   selector:
     matchLabels:
-      app: SWKB-front
+      app: {{ .Values.AppName }}
       release: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: SWKB-front
+        app: {{ .Values.AppName }}
         release: {{ .Release.Name }}
     spec:
       containers:
-        - name: SWKB-front
+        - name: {{ .Values.AppName }}
           image: {{ .Values.image }}   
           ports:
             - containerPort: {{ .Values.ContainerPort }}
