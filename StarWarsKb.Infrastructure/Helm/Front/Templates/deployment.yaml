@@ -1,10 +1,10 @@
 ﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: swkb-front-deployment
+  name: swkbfrontdeployment
   labels:
     app: {{ .Values.AppName }}
-    chart: helm-swkb
+    chart: helmswkb
     release: {{ .Release.Service }}
     heritage: {{ .Release.Service }}
 spec:

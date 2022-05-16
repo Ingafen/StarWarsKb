@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: swkb-front-svc
+  name: swkbfrontsvc
   labels:
     app: {{ .Values.AppName }}
-    chart: helm-swkb
+    chart: helmswkb
     release: {{ .Release.Service }}
     heritage: {{ .Release.Service }}
 spec:
