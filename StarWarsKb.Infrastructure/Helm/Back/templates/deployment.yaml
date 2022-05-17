@@ -1,0 +1,34 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.Deployment.Name }}
+  labels:
+    app: {{ .Values.AppName }}
+    release: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.Deployment.Replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.AppName }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.AppName }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Values.AppName }}
+          image: {{ .Values.Deployment.Image }}  
+          ports:
+            - name: http
+              containerPort: {{ .Values.ContainerPort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http

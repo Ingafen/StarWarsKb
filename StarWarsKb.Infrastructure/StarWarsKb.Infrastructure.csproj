@@ -10,8 +10,4 @@
       <None Remove="Terraform\.terraform.lock.hcl" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Helm\Back" />
-    </ItemGroup>
-
 </Project>
