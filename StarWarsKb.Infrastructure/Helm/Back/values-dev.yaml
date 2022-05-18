@@ -2,15 +2,22 @@ Deployment:
   Replicas: 1
   Name: swkb-back-dev
   Image: ingafen/swkb-back
+
 Service:
   Type: NodePort
   Name: swkb-back-dev
+
 Autoscaling:
   Enabled: false
   Name: swkb-back-hpa
   MinReplicas: 1
   MaxReplicas: 10
   TargetRAMUtilization: 60 
+
 ContainerPort: 80
+
 TargetPort: 888
+
 AppName: swkbback
+
+ConnectionString: "Default value"
