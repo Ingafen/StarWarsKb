@@ -1,31 +1,31 @@
 ﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.Deployment.Name }}
+  name: {{ .Values.deployment.name }}
   labels:
-    app: {{ .Values.AppName }}
+    app: {{ .Values.appName }}
     release: {{ .Release.Service }}
 spec:
-  replicas: {{ .Values.Deployment.Replicas }}
+  replicas: {{ .Values.deployment.replicas }}
   selector:
     matchLabels:
-      app: {{ .Values.AppName }}
+      app: {{ .Values.appName }}
       release: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ .Values.AppName }}
+        app: {{ .Values.appName }}
         release: {{ .Release.Name }}
     spec:
       containers:
-        - name: {{ .Values.AppName }}
+        - name: {{ .Values.appName }}
           image: {{ .Values.Deployment.Image }}
           env:
             - name: SWKB-back-cs
-              value: {{ .Values.ConnectionString }}  
+              value: {{ .Values.connectionString }}  
           ports:
             - name: http
-              containerPort: {{ .Values.ContainerPort }}
+              containerPort: {{ .Values.containerPort }}
               protocol: TCP
           livenessProbe:
             httpGet:
