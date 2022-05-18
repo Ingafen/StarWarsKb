@@ -1,17 +1,17 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.Service.Name }}
+  name: {{ .Values.service.name }}
   labels:
-    app: {{ .Values.AppName }}
+    app: {{ .Values.appName }}
     release: {{ .Release.Service }}
 spec:
-  type: {{ .Values.Service.Type }}
+  type: {{ .Values.service.type }}
   selector:
-    app: {{ .Values.AppName }}
+    app: {{ .Values.appName }}
     release: {{ .Release.Name }}
   ports:
     - protocol: TCP
-      port: {{ .Values.ContainerPort }}
-      targetPort: {{ .Values.TargetPort }}
+      port: {{ .Values.containerPort }}
+      targetPort: {{ .Values.targetPort }}
       name: http
