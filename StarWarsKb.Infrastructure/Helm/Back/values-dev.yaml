@@ -14,4 +14,3 @@ Autoscaling:
 ContainerPort: 80
 TargetPort: 888
 AppName: swkbback
-ConnectionString: "default value"
