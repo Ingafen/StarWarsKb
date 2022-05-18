@@ -11,6 +11,7 @@ Autoscaling:
   MinReplicas: 1
   MaxReplicas: 10
   TargetRAMUtilization: 60 
-ContainerPort: 81
-TargetPort: 81
+ContainerPort: 80
+TargetPort: 888
 AppName: swkbback
+ConnectionString: "default value"
