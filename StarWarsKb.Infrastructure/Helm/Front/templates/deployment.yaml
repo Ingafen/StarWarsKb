@@ -23,6 +23,7 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.ContainerPort }}
+              targetPort: {{ .Values.TargetPort }}
               protocol: TCP
           livenessProbe:
             httpGet:
