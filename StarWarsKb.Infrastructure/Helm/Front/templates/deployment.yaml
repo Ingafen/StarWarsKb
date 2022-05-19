@@ -20,6 +20,9 @@ spec:
       containers:
         - name: {{ .Values.AppName }}
           image: {{ .Values.Deployment.Image }}  
+          env:
+            - name: SWKB-back-address
+              value: {{ .Values.backURL }}
           ports:
             - name: http
               containerPort: {{ .Values.TargetPort }}

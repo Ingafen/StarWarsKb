@@ -14,3 +14,4 @@ Autoscaling:
 ContainerPort: 887
 TargetPort: 80
 AppName: swkbfront
+backURL: http://swkb-back-dev.dev.kubernetes.default.svc:888
