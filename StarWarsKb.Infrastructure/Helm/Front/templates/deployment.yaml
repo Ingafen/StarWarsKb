@@ -22,8 +22,7 @@ spec:
           image: {{ .Values.Deployment.Image }}  
           ports:
             - name: http
-              containerPort: {{ .Values.ContainerPort }}
-              targetPort: {{ .Values.TargetPort }}
+              containerPort: {{ .Values.TargetPort }}
               protocol: TCP
           livenessProbe:
             httpGet:

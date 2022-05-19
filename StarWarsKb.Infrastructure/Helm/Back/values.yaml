@@ -6,7 +6,7 @@ deployment:
 service:
   type: NodePort
   name: swkb-back-dev
-
+  nodePort: 31234
 autoscaling:
   enabled: false
   name: swkb-back-hpa
