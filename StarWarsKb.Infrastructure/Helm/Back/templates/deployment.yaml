@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: {{ .Values.appName }}
-          image: {{ .Values.Deployment.Image }}
+          image: {{ .Values.deployment.image }}
           env:
             - name: SWKB-back-cs
               valueFrom:
