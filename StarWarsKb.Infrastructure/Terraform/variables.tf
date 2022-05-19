@@ -62,3 +62,9 @@ variable "region_id" {
   type = string
   default = "ru-central1"
 }
+
+variable "db_password" {
+  type = string
+  default = "default_password"
+  description = "DB password"
+}

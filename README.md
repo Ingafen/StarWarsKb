@@ -23,7 +23,8 @@ To set up infrastructure on Yandex Cloud you need:
    - `ssh-keygen -t rsa -b 2048 -C ubuntu@yandex.ru`
 
 ### Step 2. Create cloud infrastructure by terraform
-Run `terraform apply` from *StarWarsKb.Infrastructure/Terraform* directory.
+Run `terraform apply` from *StarWarsKb.Infrastructure/Terraform* directory. 
+If you want to set your db password then run `terraform apply -var="db_password=your_pass"`
 
 By default terraform creates bastion host, 1 master node and 2 worker nodes. You can change these parameters, more info about count and size of nodes is here: *StarWarsKb.Infrastructure/Terraform/README.md*
 

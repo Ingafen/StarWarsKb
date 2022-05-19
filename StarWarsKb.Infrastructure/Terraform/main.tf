@@ -44,6 +44,8 @@ resource "yandex_compute_instance" "bastion" {
       user_name = var.user_name
       public_key = file(var.public_key_path)
       private_key = file(var.private_key_path)
+      sonar_node_name = yandex_compute_instance.sonarqubenode.hostname
+      sonar_node_ip = yandex_compute_instance.sonarqubenode.network_interface.0.ip_address
     } )
     ssh-keys = join(":", [var.user_name, file(var.public_key_path)])
   }
@@ -127,4 +129,29 @@ locals {
 output "bastion_ip" {
   value = yandex_compute_instance.bastion.network_interface.0.nat_ip_address
   description = "IP of bastion host"
+}
+
+resource "yandex_mdb_postgresql_cluster" "db" {
+  environment = "PRODUCTION"
+  name        = "db"
+  network_id  = yandex_vpc_network.vpc.id
+  config {
+    version = "14"
+    resources {
+      disk_size          = 10
+      resource_preset_id = "b2.nano"
+      disk_type_id = "network-hdd"
+    }
+  }
+  database {
+    name  = "StarWarsKb"
+    owner = "ingafen"
+  }
+  host {
+    zone = var.vpc_zone
+  }
+  user {
+    name     = "ingafen"
+    password = var.db_password
+  }
 }
