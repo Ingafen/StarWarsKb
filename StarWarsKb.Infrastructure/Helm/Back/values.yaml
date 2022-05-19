@@ -1,7 +1,7 @@
 deployment:
   replicas: 1
   name: swkb-back-dev
-  image: ingafen/swkb-back
+  image: ingafen/swkb-back:dev
 
 service:
   type: NodePort

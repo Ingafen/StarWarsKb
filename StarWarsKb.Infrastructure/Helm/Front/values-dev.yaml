@@ -1,7 +1,7 @@
 Deployment:
   Replicas: 1
   Name: swkb-front-dev
-  Image: ingafen/swkb-front
+  Image: ingafen/swkb-front:dev
 Service:
   Type: NodePort
   Name: swkb-front-dev

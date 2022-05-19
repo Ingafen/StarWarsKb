@@ -1,0 +1,57 @@
+name: Dev-Workflow
+on: 
+  push:
+    branches:
+      - dev
+jobs:
+  build_and_test:
+    name: build_and_test
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v1
+      - name: Install .net core 3.1
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '3.1.x'
+      - name: Build project
+        uses: cake-build/cake-action@v1
+        env:
+          EXPECTED_VERBOSITY: Diagnostic
+        with:
+         script-path: recipe.cake
+         target: ReleaseBuildAll
+         verbosity: Normal
+         cake-version: 2.2.0
+         cake-bootstrap: true
+      - name: Run unit tests
+        uses: cake-build/cake-action@v1
+        env:
+          EXPECTED_VERBOSITY: Diagnostic
+        with:
+          script-path: recipe.cake
+          target: Test
+          verbosity: Normal
+          cake-version: 2.2.0
+          cake-bootstrap: true
+      - name: Set up QEMU        
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}  
+      - name: Build front-end and push to hub
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/swkb-front:dev
+          file: StarWarsKb.Front/Dockerfile
+      - name: Build back-end and push to hub
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/swkb-back:dev
+          file: StarWarsKb.Back/Dockerfile
