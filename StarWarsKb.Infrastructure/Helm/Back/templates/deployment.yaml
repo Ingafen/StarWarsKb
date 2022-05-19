@@ -28,7 +28,7 @@ spec:
                   key: connstr 
           ports:
             - name: http
-              containerPort: {{ .Values.containerPort }}
+              containerPort: {{ .Values.targetPort }}
               protocol: TCP
           livenessProbe:
             httpGet:
