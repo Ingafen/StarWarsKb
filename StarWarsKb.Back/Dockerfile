@@ -17,4 +17,5 @@ RUN dotnet publish "StarWarsKb.Back.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+RUN mkdir -p ~/.postgresql && wget "https://storage.yandexcloud.net/cloud-certs/CA.pem" -O ~/.postgresql/root.crt && chmod 0600 ~/.postgresql/root.crt
 ENTRYPOINT ["dotnet", "StarWarsKb.Back.dll"]

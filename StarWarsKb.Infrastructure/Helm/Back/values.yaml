@@ -19,5 +19,3 @@ containerPort: 80
 targetPort: 888
 
 appName: swkbback
-
-connectionString: "Default value"

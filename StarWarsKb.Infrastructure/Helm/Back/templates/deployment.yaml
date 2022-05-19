@@ -22,7 +22,10 @@ spec:
           image: {{ .Values.Deployment.Image }}
           env:
             - name: SWKB-back-cs
-              value: {{ .Values.connectionString }}  
+              valueFrom:
+                secretKeyRef:
+                  name: cs
+                  key: connstr 
           ports:
             - name: http
               containerPort: {{ .Values.containerPort }}
