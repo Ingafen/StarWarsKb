@@ -16,7 +16,11 @@ RUN dotnet publish "StarWarsKb.Back.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
+COPY --from=build /src .
+RUN dotnet tool install --global dotnet-ef
+RUN apt-get update && apt-get install -y wget \
+    && mkdir -p ~/.postgresql \ 
+    && wget "https://storage.yandexcloud.net/cloud-certs/CA.pem" -O ~/.postgresql/root.crt \
+    && chmod 0600 ~/.postgresql/root.crt
 COPY --from=publish /app/publish .
-RUN mkdir -p ~/.postgresql
-RUN apt-get update && apt-get install -y wget && wget "https://storage.yandexcloud.net/cloud-certs/CA.pem" -O ~/.postgresql/root.crt && chmod 0600 ~/.postgresql/root.crt
-ENTRYPOINT ["dotnet", "StarWarsKb.Back.dll"]
+ENTRYPOINT ["/bin.sh", "-c", "dotnet ef database update",  "dotnet StarWarsKb.Back.dll"]
