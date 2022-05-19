@@ -14,8 +14,8 @@ autoscaling:
   maxReplicas: 10
   targetRAMUtilization: 60 
 
-containerPort: 80
+containerPort: 888
 
-targetPort: 888
+targetPort: 80
 
 appName: swkbback

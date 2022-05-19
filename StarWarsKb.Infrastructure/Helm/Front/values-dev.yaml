@@ -11,6 +11,6 @@ Autoscaling:
   MinReplicas: 1
   MaxReplicas: 10
   TargetRAMUtilization: 60 
-ContainerPort: 80
-TargetPort: 887
+ContainerPort: 887
+TargetPort: 80
 AppName: swkbfront
