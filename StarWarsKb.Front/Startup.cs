@@ -27,6 +27,7 @@ namespace StarWarsKb.Front
             services.AddTransient<IReportReader, ReportReader>();
             services.AddHttpClient();
             services.AddTransient<IHttpReader, HttpReader>();
+            services.AddTransient<IBackEndCaller, BackEndCaller>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

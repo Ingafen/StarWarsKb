@@ -32,5 +32,11 @@ namespace StarWarsKb.Back.Model
         {
             _dbContext.Starships.AddRange(starships);
         }
+
+        public void DeleteAll()
+        {
+            var all = _dbContext.Starships.ToList();
+            _dbContext.Starships.RemoveRange(all);
+        }
     }
 }

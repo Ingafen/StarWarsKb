@@ -30,5 +30,11 @@ namespace StarWarsKb.Back.Model
         {
             _dbContext.Planets.AddRange(entities);
         }
+
+        public void DeleteAll()
+        {
+            var all = _dbContext.Planets.ToList();
+            _dbContext.Planets.RemoveRange(all);
+        }
     }
 }

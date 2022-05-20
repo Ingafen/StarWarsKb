@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using StarWarsKb.Back.Model;
+using StarWarsKb.Back.Model.POCO;
 using StarWarsKb.Infrastructure.Model;
 using StarWarsKb.Infrastructure.Services;
 
@@ -28,6 +29,18 @@ namespace StarWarsKb.Back
             services.AddTransient<IBaseRepository<Starship>, StarshipsRepository>();
             services.AddTransient<IBaseRepository<Planet>, PlanetsRepository>();
             services.AddTransient<IReportGenerator, ReportGenerator>();
+            services.AddTransient<IUpdateService, UpdateService>();
+            services.AddTransient<IWebReader<CharacterPOCO>, WebCharacterPOCOReader>();
+            services.AddTransient<IWebReader<StarshipPOCO>, WebStarshipPOCOReader>();
+            services.AddTransient<IWebReader<PlanetPOCO>, WebPlanetPOCOReader>();
+            services.AddTransient<ICharacterService, CharacterService>();
+            services.AddTransient<IStarshipService, StarshipService>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<IBaseRepository<Starship>, StarshipsRepository>();
+            services.AddTransient<IBaseRepository<Planet>, PlanetsRepository>();
+            services.AddTransient<IBaseRepository<Character>, CharactersRepository>();
+            services.AddTransient<IPlanetService, PlanetService>();
+            services.AddTransient<IClearService, ClearService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
