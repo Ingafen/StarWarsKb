@@ -83,6 +83,42 @@ nodeSelector:
 postgresql.persistence.enabled: "false"
 EOT
 
+cat <<EOT > dashboard-admin.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dashboard-admin
+  namespace: kubernetes-dashboard
+EOT
+
+cat <<EOT > role-bind.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: dashboard-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: dashboard-admin
+  namespace: kubernetes-dashboard
+EOT
+
+cat <<EOT > cs-dev.txt
+Host=${db_host};port=6432;sslmode=Require;Database=${db_dev_name};Username=${db_user};Password=${db_password};Trust Server Certificate=true
+EOT
+
+cat <<EOT > cs-test.txt
+Host=${db_host};port=6432;sslmode=Require;Database=${db_test_name};Username=${db_user};Password=${db_password};Trust Server Certificate=true
+EOT
+
+cat <<EOT > cs-prod.txt
+Host=${db_host};port=6432;sslmode=Require;Database=${db_prod_name};Username=${db_user};Password=${db_password};Trust Server Certificate=true
+EOT
+
+
 cat <<EOT > master.sh
 export KUBECONFIG=/etc/kubernetes/admin.conf
 chown ubuntu:ubuntu /etc/kubernetes/admin.conf
@@ -101,11 +137,30 @@ kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort"}}'
 curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
 chmod +x /usr/local/bin/argocd
 
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml
+kubectl apply -f dashboard-admin.yaml
+kubectl apply -f role-bind.yaml
+
+kubectl create namespace dev
+kubectl create namespace test
+kubectl create namespace prod
+
+kubectl create secret generic cs-dev --from-file=connstr=./cs-dev.txt
+kubectl create secret generic cs-test --from-file=connstr=./cs-test.txt
+kubectl create secret generic cs-prod --from-file=connstr=./cs-prod.txt
+
 EOT
+
 
 scp -i id_rsa -o StrictHostKeyChecking=no master.sh ubuntu@${master_name}:master.sh 
 scp -i id_rsa -o StrictHostKeyChecking=no sonar-values.yaml ubuntu@${master_name}:sonar-values.yaml 
+scp -i id_rsa -o StrictHostKeyChecking=no dashboard-admin.yaml ubuntu@${master_name}:dashboard-admin.yaml 
+scp -i id_rsa -o StrictHostKeyChecking=no role-bind.yaml ubuntu@${master_name}:role-bind.yaml 
+scp -i id_rsa -o StrictHostKeyChecking=no cs-prod.txt ubuntu@${master_name}:cs-prod.txt 
+scp -i id_rsa -o StrictHostKeyChecking=no cs-dev.txt ubuntu@${master_name}:cs-dev.txt.yaml 
+scp -i id_rsa -o StrictHostKeyChecking=no cs-test.txt.yaml ubuntu@${master_name}:cs-test.yaml 
 ssh -i id_rsa -o StrictHostKeyChecking=no ubuntu@${master_name} "sudo ./master.sh"
+
 
 date >> log.txt
 
