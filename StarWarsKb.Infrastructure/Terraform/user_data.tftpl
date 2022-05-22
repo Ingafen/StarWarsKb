@@ -72,6 +72,269 @@ cp my-inventory.ini inventory/ingafen/
 sed -i 's/helm_enabled: false/helm_enabled: true/' inventory/ingafen/group_vars/k8s_cluster/addons.yml
 ansible-playbook -i inventory/ingafen/my-inventory.ini cluster.yml
 
+cat <<EOT > sonar-values.yaml
+deploymentType: "StatefulSet"
+replicaCount: 1
+deploymentStrategy: {}
+OpenShift:
+  enabled: false
+  createSCC: true
+
+edition: "community"
+
+image:
+  repository: sonarqube
+  tag: 9.4.0-{{ .Values.edition }}
+  pullPolicy: IfNotPresent
+
+securityContext:
+  fsGroup: 1000
+
+containerSecurityContext:
+  runAsUser: 1000
+
+elasticsearch:
+  configureNode: true
+  bootstrapChecks: true
+
+service:
+  type: NodePort
+  externalPort: 9000
+  internalPort: 9000
+  labels:
+  annotations: {}
+
+networkPolicy:
+  enabled: false
+
+nginx:
+  enabled: false
+
+ingress:
+  enabled: false
+  hosts:
+    - name: sonarqube.your-org.com
+      path: /
+  annotations: {}
+
+  tls: []
+
+route:
+  enabled: false
+  host: ""
+  tls:
+    termination: edge
+
+affinity: {}
+
+tolerations:
+  - key: "sonarqube"
+    operator: "Equal"
+    value: "true"
+    effect: "NoSchedule"
+
+nodeSelector:
+  sonarqube: "true"
+
+hostAliases: []
+
+readinessProbe:
+  initialDelaySeconds: 60
+  periodSeconds: 30
+  failureThreshold: 6
+  sonarWebContext: /
+
+livenessProbe:
+  initialDelaySeconds: 60
+  periodSeconds: 30
+  failureThreshold: 6
+  sonarWebContext: /
+
+startupProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  failureThreshold: 24
+  sonarWebContext: /
+
+initContainers:
+  resources: {}
+
+extraInitContainers: {}
+
+extraContainers: []
+
+caCerts:
+  enabled: false
+  image: adoptopenjdk/openjdk11:alpine
+  secret: your-secret
+
+initSysctl:
+  enabled: true
+  vmMaxMapCount: 524288
+  fsFileMax: 131072
+  nofile: 131072
+  nproc: 8192
+  # image: busybox:1.32
+  securityContext:
+    privileged: true
+  # resources: {}
+
+initFs:
+  enabled: true
+  # image: busybox:1.32
+  securityContext:
+    privileged: true
+
+prometheusExporter:
+  enabled: true
+  version: "0.16.0"
+  noCheckCertificate: false
+
+  webBeanPort: 8000
+  ceBeanPort: 8001
+
+  config:
+    rules:
+      - pattern: ".*"
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+
+plugins:
+  install: []
+  lib: []
+  noCheckCertificate: false
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+
+jvmOpts: ""
+
+jvmCeOpts: ""
+
+monitoringPasscode: "define_it"
+
+annotations: {}
+
+resources:
+  limits:
+    cpu: 800m
+    memory: 4Gi
+  requests:
+    cpu: 400m
+    memory: 2Gi
+
+persistence:
+  enabled: false
+  ## Set annotations on pvc
+  annotations: {}
+
+  storageClass:
+  accessMode: ReadWriteOnce
+  size: 5Gi
+  uid: 1000
+  volumes: []
+  mounts: []
+
+emptyDir: {}
+
+jdbcOverwrite:
+  enable: false
+  jdbcUrl: "jdbc:postgresql://myPostgress/myDatabase?socketTimeout=1500"
+  jdbcUsername: "sonarUser"
+  jdbcPassword: "sonarPass"
+
+postgresql:
+  enabled: true
+  postgresqlUsername: "sonarUser"
+  postgresqlPassword: "sonarPass"
+  postgresqlDatabase: "sonarDB"
+  service:
+    port: 5432
+  resources:
+    limits:
+      cpu: 2
+      memory: 2Gi
+    requests:
+      cpu: 100m
+      memory: 200Mi
+  persistence:
+    enabled: false
+    #    accessMode: ReadWriteOnce
+    #    size: 20Gi
+    #    storageClass:
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+  volumePermissions:
+    enabled: false
+    securityContext:
+      runAsUser: 0
+  shmVolume:
+    chmod:
+      enabled: false
+  serviceAccount:
+    enabled: false
+
+podLabels: {}
+
+sonarqubeFolder: /opt/sonarqube
+
+tests:
+  enabled: true
+  resources: {}
+  initContainers:
+    resources: {}
+
+serviceAccount:
+  create: false
+  annotations: {}
+
+extraConfig:
+  secrets: []
+  configmaps: []
+
+terminationGracePeriodSeconds: 60
+EOT
+
+cat <<EOT > dashboard-admin.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dashboard-admin
+  namespace: kubernetes-dashboard
+EOT
+
+cat <<EOT > role-bind.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: dashboard-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: dashboard-admin
+  namespace: kubernetes-dashboard
+EOT
+
+cat <<EOT > cs-dev.txt
+Host=${db_host};port=6432;sslmode=Require;Database=${db_dev_name};Username=${db_user};Password=${db_password};Trust Server Certificate=true
+EOT
+
+cat <<EOT > cs-test.txt
+Host=${db_host};port=6432;sslmode=Require;Database=${db_test_name};Username=${db_user};Password=${db_password};Trust Server Certificate=true
+EOT
+
+cat <<EOT > cs-prod.txt
+Host=${db_host};port=6432;sslmode=Require;Database=${db_prod_name};Username=${db_user};Password=${db_password};Trust Server Certificate=true
+EOT
+
 cat <<EOT > master.sh
 export KUBECONFIG=/etc/kubernetes/admin.conf
 chown ubuntu:ubuntu /etc/kubernetes/admin.conf
@@ -81,20 +344,46 @@ kubectl label node sonarqubenode sonarqube=true
 helm repo add sonarqube https://SonarSource.github.io/helm-chart-sonarqube
 helm repo update
 kubectl create namespace sonarqube
-helm upgrade --install -n sonarqube sonarqube sonarqube/sonarqube
-
+helm upgrade --install -n sonarqube -f sonar-values.yaml sonarqube sonarqube/sonarqube
 
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort"}}'
-
 curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
 chmod +x /usr/local/bin/argocd
 
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml
+kubectl apply -f dashboard-admin.yaml
+kubectl apply -f role-bind.yaml
+kubectl patch svc kubernetes-dashboard -n kubernetes-dashboard -p '{"spec": {"type": "NodePort"}}'
+
+kubectl create namespace dev
+kubectl create namespace test
+kubectl create namespace prod
+
+kubectl create secret generic cs-dev --from-file=connstr=./cs-dev.txt -n dev
+kubectl create secret generic cs-test --from-file=connstr=./cs-test.txt -n test
+kubectl create secret generic cs-prod --from-file=connstr=./cs-prod.txt -n prod
+
+kubectl create namespace monitoring
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm install stable prometheus-community/kube-prometheus-stack -n monitoring 
+kubectl patch svc stable-kube-prometheus-sta-prometheus -n monitoring -p '{"spec": {"type": "NodePort"}}'
+kubectl patch svc stable-grafana -n monitoring -p '{"spec": {"type": "NodePort"}}'
 
 EOT
 
-ssh -i id_rsa -o StrictHostKeyChecking=no ubuntu@192.168.21.12 ls
+scp -i id_rsa -o StrictHostKeyChecking=no master.sh ubuntu@${master_name}:master.sh
+scp -i id_rsa -o StrictHostKeyChecking=no sonar-values.yaml ubuntu@${master_name}:sonar-values.yaml
+scp -i id_rsa -o StrictHostKeyChecking=no dashboard-admin.yaml ubuntu@${master_name}:dashboard-admin.yaml
+scp -i id_rsa -o StrictHostKeyChecking=no role-bind.yaml ubuntu@${master_name}:role-bind.yaml
+scp -i id_rsa -o StrictHostKeyChecking=no cs-prod.txt ubuntu@${master_name}:cs-prod.txt
+scp -i id_rsa -o StrictHostKeyChecking=no cs-dev.txt ubuntu@${master_name}:cs-dev.txt
+scp -i id_rsa -o StrictHostKeyChecking=no cs-test.txt ubuntu@${master_name}:cs-test.txt
+ssh -i id_rsa -o StrictHostKeyChecking=no ubuntu@${master_name} "chmod +x master.sh"
+# ssh -i id_rsa -o StrictHostKeyChecking=no ubuntu@${master_name} "sudo ./master.sh"
+
+
 
 
 date >> log.txt
