@@ -6,7 +6,7 @@ namespace StarWarsKb.UnitTests.Back.Model
 {
     public class WebCharacterPOCOReaderTests
     {
-        [Fact]
+        [Fact(Skip="Id may be changed")]
         public void CanGetPeopleObjectFromAPI()
         {
             var reader = new WebCharacterPOCOReader();
