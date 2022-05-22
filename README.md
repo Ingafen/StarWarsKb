@@ -21,6 +21,8 @@ To set up infrastructure on Yandex Cloud you need:
    - YC_ZONE=ru-central1-a ([all Yandex Cloud AZs here](https://cloud.yandex.ru/docs/overview/concepts/geo-scope))
  - Create ssh-key (by default username is ubuntu) and save it to `~\.ssh\id_rsa`. You can change user/key parameters on *variable.tf* file
    - `ssh-keygen -t rsa -b 2048 -C ubuntu@yandex.ru`
+ - Create two git-hub secrets (repository secrets) username: DOCKERHUB_USERNAME, DOCKERHUB_TOKEN
+
 
 ### Step 2. Create cloud infrastructure by terraform
 Run `terraform apply` from *StarWarsKb.Infrastructure/Terraform* directory. 

@@ -73,14 +73,231 @@ sed -i 's/helm_enabled: false/helm_enabled: true/' inventory/ingafen/group_vars/
 ansible-playbook -i inventory/ingafen/my-inventory.ini cluster.yml
 
 cat <<EOT > sonar-values.yaml
-tolerations: 
+deploymentType: "StatefulSet"
+replicaCount: 1
+deploymentStrategy: {}
+OpenShift:
+  enabled: false
+  createSCC: true
+
+edition: "community"
+
+image:
+  repository: sonarqube
+  tag: 9.4.0-{{ .Values.edition }}
+  pullPolicy: IfNotPresent
+
+securityContext:
+  fsGroup: 1000
+
+containerSecurityContext:
+  runAsUser: 1000
+
+elasticsearch:
+  configureNode: true
+  bootstrapChecks: true
+
+service:
+  type: NodePort
+  externalPort: 9000
+  internalPort: 9000
+  labels:
+  annotations: {}
+
+networkPolicy:
+  enabled: false
+
+nginx:
+  enabled: false
+
+ingress:
+  enabled: false
+  hosts:
+    - name: sonarqube.your-org.com
+      path: /
+  annotations: {}
+
+  tls: []
+
+route:
+  enabled: false
+  host: ""
+  tls:
+    termination: edge
+
+affinity: {}
+
+tolerations:
   - key: "sonarqube"
     operator: "Equal"
     value: "true"
     effect: "NoSchedule"
-nodeSelector: 
+
+nodeSelector:
   sonarqube: "true"
-postgresql.persistence.enabled: "false"
+
+hostAliases: []
+
+readinessProbe:
+  initialDelaySeconds: 60
+  periodSeconds: 30
+  failureThreshold: 6
+  sonarWebContext: /
+
+livenessProbe:
+  initialDelaySeconds: 60
+  periodSeconds: 30
+  failureThreshold: 6
+  sonarWebContext: /
+
+startupProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  failureThreshold: 24
+  sonarWebContext: /
+
+initContainers:
+  resources: {}
+
+extraInitContainers: {}
+
+extraContainers: []
+
+caCerts:
+  enabled: false
+  image: adoptopenjdk/openjdk11:alpine
+  secret: your-secret
+
+initSysctl:
+  enabled: true
+  vmMaxMapCount: 524288
+  fsFileMax: 131072
+  nofile: 131072
+  nproc: 8192
+  # image: busybox:1.32
+  securityContext:
+    privileged: true
+  # resources: {}
+
+initFs:
+  enabled: true
+  # image: busybox:1.32
+  securityContext:
+    privileged: true
+
+prometheusExporter:
+  enabled: true
+  version: "0.16.0"
+  noCheckCertificate: false
+
+  webBeanPort: 8000
+  ceBeanPort: 8001
+
+  config:
+    rules:
+      - pattern: ".*"
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+
+plugins:
+  install: []
+  lib: []
+  noCheckCertificate: false
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+
+jvmOpts: ""
+
+jvmCeOpts: ""
+
+monitoringPasscode: "define_it"
+
+annotations: {}
+
+resources:
+  limits:
+    cpu: 800m
+    memory: 4Gi
+  requests:
+    cpu: 400m
+    memory: 2Gi
+
+persistence:
+  enabled: false
+  ## Set annotations on pvc
+  annotations: {}
+
+  storageClass:
+  accessMode: ReadWriteOnce
+  size: 5Gi
+  uid: 1000
+  volumes: []
+  mounts: []
+
+emptyDir: {}
+
+jdbcOverwrite:
+  enable: false
+  jdbcUrl: "jdbc:postgresql://myPostgress/myDatabase?socketTimeout=1500"
+  jdbcUsername: "sonarUser"
+  jdbcPassword: "sonarPass"
+
+postgresql:
+  enabled: true
+  postgresqlUsername: "sonarUser"
+  postgresqlPassword: "sonarPass"
+  postgresqlDatabase: "sonarDB"
+  service:
+    port: 5432
+  resources:
+    limits:
+      cpu: 2
+      memory: 2Gi
+    requests:
+      cpu: 100m
+      memory: 200Mi
+  persistence:
+    enabled: false
+    #    accessMode: ReadWriteOnce
+    #    size: 20Gi
+    #    storageClass:
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+  volumePermissions:
+    enabled: false
+    securityContext:
+      runAsUser: 0
+  shmVolume:
+    chmod:
+      enabled: false
+  serviceAccount:
+    enabled: false
+
+podLabels: {}
+
+sonarqubeFolder: /opt/sonarqube
+
+tests:
+  enabled: true
+  resources: {}
+  initContainers:
+    resources: {}
+
+serviceAccount:
+  create: false
+  annotations: {}
+
+extraConfig:
+  secrets: []
+  configmaps: []
+
+terminationGracePeriodSeconds: 60
 EOT
 
 cat <<EOT > master.sh
@@ -97,14 +314,17 @@ helm upgrade --install -n sonarqube -f sonar-values.yaml sonarqube sonarqube/son
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort"}}'
-
 curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
 chmod +x /usr/local/bin/argocd
 
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml
+
 EOT
 
-scp -i id_rsa -o StrictHostKeyChecking=no master.sh ubuntu@${master_name}:master.sh 
-scp -i id_rsa -o StrictHostKeyChecking=no sonar-values.yaml ubuntu@${master_name}:sonar-values.yaml 
+scp -i id_rsa -o StrictHostKeyChecking=no master.sh ubuntu@${master_name}:master.sh
+scp -i id_rsa -o StrictHostKeyChecking=no sonar-values.yaml ubuntu@${master_name}:sonar-values.yaml
+scp -i id_rsa -o StrictHostKeyChecking=no sonar-values.yaml ubuntu@${master_name}:sonar-values.yaml
+ssh -i id_rsa -o StrictHostKeyChecking=no ubuntu@${master_name} "chmod +x master.sh"
 ssh -i id_rsa -o StrictHostKeyChecking=no ubuntu@${master_name} "sudo ./master.sh"
 
 date >> log.txt
