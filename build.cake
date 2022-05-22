@@ -48,7 +48,9 @@ Task("TestCoverage")
     .IsDependentOn("Test")
     .Does(() =>
 {
-    var testSettings = new DotNetCoreTestSettings {        
+    var testSettings = new DotNetCoreTestSettings { 
+        Configuration = configuration,
+        NoBuild = true,       
     };
 
     var coverletSettings = new CoverletSettings {
