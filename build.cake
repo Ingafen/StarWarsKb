@@ -38,8 +38,27 @@ Task("Test")
     DotNetTest("./StarWarsKb.sln", new DotNetCoreTestSettings
     {
         Configuration = configuration,
-        NoBuild = true,
+        NoBuild = true
     });
 });
+
+Task("Test_coverage")
+    .IsDependentOn("ReleaseBuildAll")
+    .Does(() =>
+{
+    var testSettings = new DotNetCoreTestSettings {
+        Configuration = configuration,
+        NoBuild = true
+    };
+
+    var coverletSettings = new CoverletSettings {
+        CollectCoverage = true,
+        CoverletOutputFormat = CoverletOutputFormat.opencover,
+        CoverletOutputDirectory = Directory(@".\coverage-results\"),
+        CoverletOutputName = $"results-{DateTime.UtcNow:dd-MM-yyyy-HH-mm-ss-FFF}"
+    };
+
+    DotNetCoreTest("./StarWarsKb.sln", testSetting, coverletSettings);
+}
 
 RunTarget(target);
