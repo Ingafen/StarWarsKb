@@ -8,12 +8,5 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/StarWarsKb</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="StarWarsKb@rc1a-y56jl19vq4dx3b42.mdb.yandexcloud.net" uuid="73314269-5242-4402-a85d-4307f065070c">
-      <driver-ref>postgresql</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://rc1a-y56jl19vq4dx3b42.mdb.yandexcloud.net:6432/StarWarsKb</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
   </component>
 </project>

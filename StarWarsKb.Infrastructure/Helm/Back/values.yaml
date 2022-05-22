@@ -2,6 +2,7 @@ deployment:
   replicas: 1
   name: swkb-back-dev
   image: ingafen/swkb-back:dev
+  secretName: cs-dev
   probe:
     initialDelaySeconds: 20
     periodSeconds: 9

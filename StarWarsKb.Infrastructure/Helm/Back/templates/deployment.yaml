@@ -24,7 +24,7 @@ spec:
             - name: SWKB-back-cs
               valueFrom:
                 secretKeyRef:
-                  name: cs
+                  name: {{ .Values.deployment.secretName }}
                   key: connstr 
           ports:
             - name: http

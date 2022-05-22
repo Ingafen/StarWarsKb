@@ -46,6 +46,12 @@ resource "yandex_compute_instance" "bastion" {
       private_key = file(var.private_key_path)
       sonar_node_name = yandex_compute_instance.sonarqubenode.hostname
       sonar_node_ip = yandex_compute_instance.sonarqubenode.network_interface.0.ip_address
+      db_dev_name = var.db_dev_name,
+      db_test_name = var.db_test_name,
+      db_prod_name = var.db_prod_name,
+      db_user = var.db_user,
+      db_password = var.db_password,
+      db_host = yandex_mdb_postgresql_cluster.db.host.0.fqdn
     } )
     ssh-keys = join(":", [var.user_name, file(var.public_key_path)])
   }
@@ -140,18 +146,32 @@ resource "yandex_mdb_postgresql_cluster" "db" {
     resources {
       disk_size          = 10
       resource_preset_id = "b2.nano"
-      disk_type_id = "network-hdd"
+      disk_type_id = "network-ssd"
     }
   }
   database {
-    name  = "StarWarsKb"
-    owner = "ingafen"
+    name  = var.db_dev_name
+    owner = var.db_user
   }
+  database {
+    name  = var.db_test_name
+    owner = var.db_user
+  }
+  database {
+    name  = var.db_prod_name
+    owner = var.db_user
+  }
+
   host {
+    name = var.db_hostname
     zone = var.vpc_zone
   }
   user {
-    name     = "ingafen"
+    name     = var.db_user
     password = var.db_password
   }
+}
+
+output "cluster_info" {
+  value = yandex_mdb_postgresql_cluster.db.host
 }

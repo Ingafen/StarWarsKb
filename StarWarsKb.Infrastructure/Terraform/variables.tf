@@ -63,8 +63,28 @@ variable "region_id" {
   default = "ru-central1"
 }
 
+variable "db_user" {
+  default = "ingafen"
+}
+
 variable "db_password" {
   type = string
   default = "default_password"
   description = "DB password"
+}
+
+variable "db_hostname" {
+  default = "ingafen_db"
+}
+
+variable "db_dev_name" {
+  default = "swkb-dev-db"
+}
+
+variable "db_test_name" {
+  default = "swkb-test-db"
+}
+
+variable "db_prod_name" {
+  default = "swkb-prod-db"
 }
