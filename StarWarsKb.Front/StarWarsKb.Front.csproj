@@ -9,4 +9,9 @@
       <ProjectReference Include="..\StarWarsKb.Infrastructure\StarWarsKb.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Cake.Coverlet" Version="2.5.4" />
+      <PackageReference Include="Cake.DotNetTool.Module" Version="2.2.0" />
+    </ItemGroup>
+
 </Project>

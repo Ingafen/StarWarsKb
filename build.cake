@@ -1,3 +1,5 @@
+#addin nuget:?package=Cake.Coverlet
+
 //ARGUMENTS
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
@@ -38,27 +40,25 @@ Task("Test")
     DotNetTest("./StarWarsKb.sln", new DotNetCoreTestSettings
     {
         Configuration = configuration,
-        NoBuild = true
+        NoBuild = true,
     });
 });
 
-Task("Test_coverage")
-    .IsDependentOn("ReleaseBuildAll")
+Task("TestCoverage")
+    .IsDependentOn("Test")
     .Does(() =>
 {
-    var testSettings = new DotNetCoreTestSettings {
-        Configuration = configuration,
-        NoBuild = true
+    var testSettings = new DotNetCoreTestSettings {        
     };
 
     var coverletSettings = new CoverletSettings {
         CollectCoverage = true,
         CoverletOutputFormat = CoverletOutputFormat.opencover,
         CoverletOutputDirectory = Directory(@".\coverage-results\"),
-        CoverletOutputName = $"results-{DateTime.UtcNow:dd-MM-yyyy-HH-mm-ss-FFF}"
+        CoverletOutputName = $"results-{DateTime.UtcNow:dd-MM-yyyy-HH-mm-ss-FFF}",
     };
 
-    DotNetCoreTest("./StarWarsKb.sln", testSetting, coverletSettings);
-}
+    DotNetCoreTest("./StarWarsKb.sln", testSettings, coverletSettings);
+});
 
 RunTarget(target);
