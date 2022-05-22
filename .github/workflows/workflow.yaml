@@ -20,7 +20,7 @@ jobs:
           EXPECTED_VERBOSITY: Diagnostic
         with:
           script-path: build.cake
-          target: Test
+          target: TestCoverage
           verbosity: Normal
           cake-version: 2.2.0
           cake-bootstrap: true
