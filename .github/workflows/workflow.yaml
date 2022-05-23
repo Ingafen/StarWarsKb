@@ -80,7 +80,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"StarWarsKB" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_URL }}" /d:sonar.cs.opencover.reportsPaths="**\coverage.cobertura.xml"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"StarWarsKB" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_URL }}" /d:sonar.cs.vscoveragexml.reportsPaths="*.coveragexml" /d:sonar.cs.vstest.reportsPaths="*.trx" /d:sonar.verbose=true /d:sonar.log.level="TRACE"
           dotnet build
-          dotnet test --no-build --collect:"XPlat Code Coverage"
+          dotnet test --collect "Code Coverage" --logger trx --results-directory "TestsResults"
+          Get-ChildItem -Recurse -Filter "*.coverage" | Foreach-Object { $outfile = "$([System.IO.Path]::GetFileNameWithoutExtension($_.FullName)).coveragexml" $output = [System.IO.Path]::Combine([System.IO.Path]::GetDirectoryName($_.FullName), $outfile) $env:CodeCoveragePath\CodeCoverage.exe analyze /output:$output $_.FullName}
+          Get-ChildItem -Recurse -Filter "*.coveragexml" | Foreach-Object { $file = Join-Path -Path $_.Directory -ChildPath $_.Name Copy-Item $file -Destination 'TestsResults'}
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
