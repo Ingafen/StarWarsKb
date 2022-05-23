@@ -8,8 +8,8 @@
     periodSeconds: 9
 
 service:
-  type: NodePort
-  name: swkb-back-test
+  type: ClusterIP
+  name: swkb-back-prod
   nodePort: 30777
 autoscaling:
   enabled: false

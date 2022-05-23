@@ -1,11 +1,11 @@
 ﻿Deployment:
   Replicas: 1
-  Name: swkb-front-test
-  Image: ingafen/swkb-front:test
+  Name: swkb-front-prod
+  Image: ingafen/swkb-front:latest
 
 Service:
   Type: NodePort
-  Name: swkb-front-test
+  Name: swkb-front-prod
 
 Autoscaling:
   Enabled: false
