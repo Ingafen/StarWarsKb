@@ -80,7 +80,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"StarWarsKB" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_URL }}" /d:sonar.cs.opencover.reportsPaths="**\coverage.xml"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"StarWarsKB" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_URL }}" /d:sonar.cs.opencover.reportsPaths="**\coverage.opencover.xml"
           dotnet build
-          dotnet test --collect "XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover        
+          dotnet test --collect "XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover  
+          dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
