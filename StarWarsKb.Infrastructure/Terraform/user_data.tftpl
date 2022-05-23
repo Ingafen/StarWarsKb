@@ -386,7 +386,7 @@ scp -i id_rsa -o StrictHostKeyChecking=no cs-test.txt ubuntu@${master_name}:cs-t
 ssh -i id_rsa -o StrictHostKeyChecking=no ubuntu@${master_name} "chmod +x master.sh"
 # ssh -i id_rsa -o StrictHostKeyChecking=no ubuntu@${master_name} "sudo ./master.sh"
 
-
+echo "Hello"
 date >> log.txt
 
 echo "Master ip is ${master_ip}"
