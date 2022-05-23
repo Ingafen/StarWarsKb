@@ -35,5 +35,11 @@ namespace StarWarsKb.Back.Model
         {
             _context.Characters.AddRange(characters);
         }
+
+        public void DeleteAll()
+        {
+            var all = _context.Characters.ToList();
+            _context.Characters.RemoveRange(all);
+        }
     }
 }

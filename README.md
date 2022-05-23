@@ -21,16 +21,18 @@ To set up infrastructure on Yandex Cloud you need:
    - YC_ZONE=ru-central1-a ([all Yandex Cloud AZs here](https://cloud.yandex.ru/docs/overview/concepts/geo-scope))
  - Create ssh-key (by default username is ubuntu) and save it to `~\.ssh\id_rsa`. You can change user/key parameters on *variable.tf* file
    - `ssh-keygen -t rsa -b 2048 -C ubuntu@yandex.ru`
+ - Create two git-hub secrets (repository secrets) username: DOCKERHUB_USERNAME, DOCKERHUB_TOKEN
+
 
 ### Step 2. Create cloud infrastructure by terraform
-Run `terraform apply` from *StarWarsKb.Infrastructure/Terraform* directory.
+Run `terraform apply` from *StarWarsKb.Infrastructure/Terraform* directory. 
+If you want to set your db password then run `terraform apply -var="db_password=your_pass"`
 
 By default terraform creates bastion host, 1 master node and 2 worker nodes. You can change these parameters, more info about count and size of nodes is here: *StarWarsKb.Infrastructure/Terraform/README.md*
 
 Output would contain IP of bastion-host.
 
-### Step 3. Create Kubernetes cluster
-
+### Step 3. Create Kubernetes cluster and deploy services
 
 Connect to bastion host by ssh:
 
@@ -40,16 +42,4 @@ After that run installation script (I don't know what was wrong with userdata):
 
 `sudo cp /var/lib/cloud/instance/user-data.txt ~/magic.sh && sudo chmod 755 magic.sh && sudo ./magic.sh`
 
-Connect to master node by ssh (you will get ip in the end of previous step):
-
-`ssh -i id_rsa ubuntu@master-node_ip`
-
-Then:
-
-`export KUBECONFIG=/etc/kubernetes/admin.conf`
-
-`sudo chown ubuntu:ubuntu /etc/kubernetes/admin.conf`
-
-And check Kubernetes installation:
-
-`kubectl get nodes`
+`kubectl`would be installed on master-host.

@@ -1,0 +1,42 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployment.name }}
+  labels:
+    app: {{ .Values.appName }}
+    release: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.appName }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Values.appName }}
+          image: {{ .Values.deployment.image }}
+          env:
+            - name: SWKB-back-cs
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.deployment.secretName }}
+                  key: connstr 
+          ports:
+            - name: http
+              containerPort: {{ .Values.targetPort }}
+              protocol: TCP
+          livenessProbe:
+            initialDelaySeconds: {{ .Values.deployment.probe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.probe.periodSeconds  }}
+            httpGet:
+              path: /characters/
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /characters/
+              port: http

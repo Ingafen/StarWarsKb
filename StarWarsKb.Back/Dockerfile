@@ -15,6 +15,10 @@ FROM build AS publish
 RUN dotnet publish "StarWarsKb.Back.csproj" -c Release -o /app/publish
 
 FROM base AS final
+RUN apt-get update && apt-get install -y wget \
+    && mkdir -p ~/.postgresql \ 
+    && wget "https://storage.yandexcloud.net/cloud-certs/CA.pem" -O ~/.postgresql/root.crt \
+    && chmod 0600 ~/.postgresql/root.crt
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "StarWarsKb.Back.dll"]
+ENTRYPOINT ["dotnet","StarWarsKb.Back.dll"]

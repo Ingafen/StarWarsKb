@@ -1,0 +1,25 @@
+deployment:
+  replicas: 1
+  name: swkb-back-dev
+  image: ingafen/swkb-back:dev
+  secretName: cs-dev
+  probe:
+    initialDelaySeconds: 20
+    periodSeconds: 9
+
+service:
+  type: NodePort
+  name: swkb-back-dev
+  nodePort: 31234
+autoscaling:
+  enabled: false
+  name: swkb-back-hpa
+  minReplicas: 1
+  maxReplicas: 10
+  targetRAMUtilization: 60 
+
+containerPort: 888
+
+targetPort: 80
+
+appName: swkbback

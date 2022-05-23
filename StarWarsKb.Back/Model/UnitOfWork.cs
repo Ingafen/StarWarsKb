@@ -6,7 +6,7 @@ namespace StarWarsKb.Back.Model
     {
         private readonly DbContext _dbContext;
 
-        public UnitOfWork(DbContext dbContext)
+        public UnitOfWork(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }

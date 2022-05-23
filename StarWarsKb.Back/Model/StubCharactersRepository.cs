@@ -78,5 +78,10 @@ namespace StarWarsKb.Back.Model
         {
             throw new System.NotImplementedException();
         }
+
+        public void DeleteAll()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

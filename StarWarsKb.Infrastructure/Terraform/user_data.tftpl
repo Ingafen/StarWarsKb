@@ -365,9 +365,12 @@ kubectl create secret generic cs-dev --from-file=connstr=./cs-dev.txt -n dev
 kubectl create secret generic cs-test --from-file=connstr=./cs-test.txt -n test
 kubectl create secret generic cs-prod --from-file=connstr=./cs-prod.txt -n prod
 
+
 kubectl create namespace monitoring
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm install stable prometheus-community/kube-prometheus-stack -n monitoring 
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm install stable prometheus-community/kube-prometheus-stack
 kubectl patch svc stable-kube-prometheus-sta-prometheus -n monitoring -p '{"spec": {"type": "NodePort"}}'
 kubectl patch svc stable-grafana -n monitoring -p '{"spec": {"type": "NodePort"}}'
 
@@ -382,8 +385,6 @@ scp -i id_rsa -o StrictHostKeyChecking=no cs-dev.txt ubuntu@${master_name}:cs-de
 scp -i id_rsa -o StrictHostKeyChecking=no cs-test.txt ubuntu@${master_name}:cs-test.txt
 ssh -i id_rsa -o StrictHostKeyChecking=no ubuntu@${master_name} "chmod +x master.sh"
 # ssh -i id_rsa -o StrictHostKeyChecking=no ubuntu@${master_name} "sudo ./master.sh"
-
-
 
 
 date >> log.txt
