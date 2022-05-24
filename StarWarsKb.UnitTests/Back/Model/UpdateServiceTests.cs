@@ -78,5 +78,11 @@ namespace StarWarsKb.UnitTests.Back.Model
         {
             _mockCharacterWebReader.Verify(x => x.ReadEntityWithId(It.IsAny<int>()), Times.AtLeast(1));
         }
+
+        [Fact]
+        public void QualityGateTest()
+        {
+            Assert.NotNull("One more test");
+        }
     }
 }
