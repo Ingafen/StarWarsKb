@@ -35,6 +35,7 @@ jobs:
           cake-version: 2.2.0
           cake-bootstrap: true
       - name: Automated Version Bump
+        id: version-bump
         uses: 'phips28/gh-action-bump-version@master'
         with: 
           tag-prefix: 'v'
@@ -58,7 +59,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/swkb-front:dev,${{ secrets.DOCKERHUB_USERNAME }}/swkb-front:${{ steps.version-bump.outputs.newTag }}-dev 
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/swkb-front:dev,${{ secrets.DOCKERHUB_USERNAME }}/swkb-front:${{ steps.version-bump.outputs.newTag }} 
           file: StarWarsKb.Front/Dockerfile
       - name: Build back-end and push to hub
         uses: docker/build-push-action@v2
