@@ -45,13 +45,15 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}  
       - name: Build front-end and push to hub
         uses: docker/build-push-action@v2
+        env:
+          NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
         with:
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/swkb-front:dev
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/swkb-front:dev,${{ secrets.DOCKERHUB_USERNAME }}/swkb-front:${{ github.run_number }}-dev
           file: StarWarsKb.Front/Dockerfile
       - name: Build back-end and push to hub
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/swkb-back:dev
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/swkb-back:dev,${{ secrets.DOCKERHUB_USERNAME }}/swkb-back:${{ github.run_number }}-dev
           file: StarWarsKb.Back/Dockerfile
