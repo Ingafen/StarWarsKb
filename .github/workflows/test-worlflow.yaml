@@ -47,11 +47,11 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/swkb-front:test
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/swkb-front:test,${{ github.run_number }}-test
           file: StarWarsKb.Front/Dockerfile
       - name: Build back-end and push to hub
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/swkb-back:test
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/swkb-back:test,${{ secrets.DOCKERHUB_USERNAME }}/swkb-back:${{ github.run_number }}-test
           file: StarWarsKb.Back/Dockerfile
