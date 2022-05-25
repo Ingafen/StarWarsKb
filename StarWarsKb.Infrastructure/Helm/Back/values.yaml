@@ -6,7 +6,7 @@ deployment:
   probe:
     live:
       initialDelaySeconds: 30
-      periodSeconds: 3
+      periodSeconds: 10
     read:
       initialDelaySeconds: 20
       periodSeconds: 2
