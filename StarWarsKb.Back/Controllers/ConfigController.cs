@@ -36,7 +36,7 @@ namespace StarWarsKb.Back.Controllers
         [Route("[action]")]
         public string Alive()
         {
-            return "I'm still alive";
+            return "I'm still alive!";
         }
     }
 }
