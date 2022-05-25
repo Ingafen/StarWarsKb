@@ -16,7 +16,7 @@ autoscaling:
   name: swkb-back-hpa
   minReplicas: 1
   maxReplicas: 10
-  targetRAMUtilization: 300Mi
+  targetRAMUtilization: 20
 
 containerPort: 888
 
