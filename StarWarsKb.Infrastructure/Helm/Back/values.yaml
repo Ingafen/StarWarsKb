@@ -22,6 +22,14 @@ autoscaling:
   maxReplicas: 10
   targetCPUUtilization: 15
 
+resources:
+  requests:
+    memory: "200Mi"
+    cpu: "200m"
+  limits:
+    memory: "300Mi"
+    cpu: "400m"
+
 containerPort: 888
 
 targetPort: 80
