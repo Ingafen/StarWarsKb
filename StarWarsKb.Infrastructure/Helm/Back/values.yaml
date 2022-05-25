@@ -18,9 +18,9 @@ service:
 autoscaling:
   enabled: true
   name: swkb-back-hpa
-  minReplicas: 2
+  minReplicas: 1
   maxReplicas: 10
-  targetCPUUtilization: 11
+  targetCPUUtilization: 15
 
 containerPort: 888
 
