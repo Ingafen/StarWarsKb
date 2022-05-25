@@ -34,7 +34,7 @@ spec:
             initialDelaySeconds: {{ .Values.deployment.probe.live.linitialDelaySeconds }}
             periodSeconds: {{ .Values.deployment.probe.live.periodSeconds  }}
             httpGet:
-              path: /characters/
+              path: /config/alive/
               port: http
           readinessProbe:
             httpGet:
