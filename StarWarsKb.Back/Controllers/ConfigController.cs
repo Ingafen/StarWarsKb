@@ -31,5 +31,12 @@ namespace StarWarsKb.Back.Controllers
             _updateService.CreateData();
             return "Success!";
         }
+
+        [HttpGet]
+        [Route("[action]")]
+        public string Alive()
+        {
+            return "I'm still alive";
+        }
     }
 }
