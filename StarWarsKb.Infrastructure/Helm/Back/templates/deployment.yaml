@@ -31,8 +31,8 @@ spec:
               containerPort: {{ .Values.targetPort }}
               protocol: TCP
           livenessProbe:
-            initialDelaySeconds: {{ .Values.deployment.probe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.deployment.probe.periodSeconds  }}
+            initialDelaySeconds: {{ .Values.deployment.probe.live.linitialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.probe.live.periodSeconds  }}
             httpGet:
               path: /characters/
               port: http
@@ -40,3 +40,5 @@ spec:
             httpGet:
               path: /characters/
               port: http
+            initialDelaySeconds: {{ .Values.deployment.probe.read.linitialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.probe.read.periodSeconds  }}

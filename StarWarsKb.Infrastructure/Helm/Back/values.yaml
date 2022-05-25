@@ -4,8 +4,12 @@ deployment:
   image: ingafen/swkb-back:dev
   secretName: cs-dev
   probe:
-    initialDelaySeconds: 20
-    periodSeconds: 3
+    live:
+      initialDelaySeconds: 30
+      periodSeconds: 3
+    read:
+      initialDelaySeconds: 20
+      periodSeconds: 2
 
 service:
   type: NodePort
