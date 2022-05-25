@@ -12,7 +12,7 @@ service:
   name: swkb-back-dev
   nodePort: 31234
 autoscaling:
-  enabled: false
+  enabled: true
   name: swkb-back-hpa
   minReplicas: 1
   maxReplicas: 10
