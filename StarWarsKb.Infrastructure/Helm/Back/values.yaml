@@ -5,7 +5,7 @@ deployment:
   secretName: cs-dev
   probe:
     initialDelaySeconds: 20
-    periodSeconds: 9
+    periodSeconds: 3
 
 service:
   type: NodePort
@@ -16,7 +16,7 @@ autoscaling:
   name: swkb-back-hpa
   minReplicas: 1
   maxReplicas: 10
-  targetCPUUtilization: 20
+  targetCPUUtilization: 15
 
 containerPort: 888
 
